@@ -1,5 +1,6 @@
 # mutations.py
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from ariadne import convert_kwargs_to_snake_case
 from api import db
 from api.models import Raid
@@ -7,9 +8,9 @@ from api.models import Raid
 @convert_kwargs_to_snake_case
 def create_raid_resolver(obj, info, title, start_time):
     try:
-        today = datetime.today()
+        today = datetime.now(tz=ZoneInfo('America/New_York'))
         raid = Raid(
-            title=title, start_time=start_time, created_at=today.strftime("%Y-%m-%d %H:%M:%S")
+            title=title, start_time=start_time, created_at=today
         )
         db.session.add(raid)
         db.session.commit()

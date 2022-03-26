@@ -6,6 +6,9 @@ from flask import request, jsonify
 from api.mutations import create_raid_resolver, delete_raid_resolver, update_raid_resolver
 from api.queries import listRaids_resolver, getRaid_resolver
 
+# Code of your application, which uses environment variables (e.g. from `os.environ` or
+# `os.getenv`) as if they came from the actual environment.
+
 query = ObjectType("Query")
 mutation = ObjectType("Mutation")
 query.set_field("listRaids", listRaids_resolver)

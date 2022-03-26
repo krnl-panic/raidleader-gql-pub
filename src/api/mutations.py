@@ -6,56 +6,45 @@ from api import db
 from api.models import Raid
 
 @convert_kwargs_to_snake_case
-def create_raid_resolver(obj, info, title, start_time):
+def create_raid_resolver(obj, info, name, start_time, end_time):
     try:
         today = datetime.now(tz=ZoneInfo('America/New_York'))
         raid = Raid(
-            title=title, start_time=start_time, created_at=today
+            name=name, start_time=start_time, end_time=end_time, created_at=today, updated_at=today
         )
         db.session.add(raid)
         db.session.commit()
-        payload = {
-            "success": True,
-            "raid": raid.to_dict()
-        }
+        payload = raid.to_dict()
     except ValueError:  # date format errors
-        payload = {
-            "success": False,
-            "errors": [f"Incorrect date format provided. Date should be in "
-                       f"the format dd-mm-yyyy."]
-        }
+        payload = None
     return payload
 
 @convert_kwargs_to_snake_case
-def update_raid_resolver(obj, info, id, title, start_time):
+def update_raid_resolver(obj, info, id, name=None, start_time=None, end_time=None):
     try:
-        raid = Raid.query.get(id)
+        raid = Raid.query.filter_by(deleted_at=None, id=id).all()
         if raid:
-            raid.title = title
-            raid.start_time = start_time
+            raid.name = name or raid.name
+            raid.start_time = start_time or raid.start_time
+            raid.end_time = end_time or raid.end_time
         db.session.add(raid)
         db.session.commit()
-        payload = {
-            "success": True,
-            "raid": raid.to_dict()
-        }
+        payload = raid.to_dict()
     except AttributeError:
-        payload = {
-            "success": False,
-            "errors": ["Item matching id {id} not found."]
-        }
+        payload = None
     return payload
 
 @convert_kwargs_to_snake_case
 def delete_raid_resolver(obj, info, id):
-    try:
+    try:        
         raid = Raid.query.get(id)
-        db.session.delete(raid)
-        db.session.commit()
-        payload = {"success": True, "post": raid.to_dict()}
+        
+        if raid and raid.deleted_at is None:
+            raid.deleted_at = datetime.now(tz=ZoneInfo('America/New_York'))
+            db.session.add(raid)
+            db.session.commit()
+            
+        payload = raid.to_dict()
     except AttributeError:
-        payload = {
-            "success": False,
-            "errors": ["Not found."]
-        }
+        payload = None
     return payload

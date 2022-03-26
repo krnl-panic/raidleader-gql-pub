@@ -1,0 +1,30 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Mutation {
+  createRaid(
+    name: String!
+    start_time: String!
+    end_time: String!
+    created_at: String
+  ): Raid!
+  updateRaid(id: ID!, name: String, start_time: String, end_time: String): Raid!
+  deleteRaid(id: ID!): Raid!
+}
+
+type Raid {
+  id: ID!
+  name: String!
+  start_time: String!
+  end_time: String!
+  created_at: String!
+  updated_at: String!
+  deleted_at: String
+}
+
+type Query {
+  listRaids: [Raid]
+  getRaid(id: ID!): Raid
+}

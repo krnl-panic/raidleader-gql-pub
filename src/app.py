@@ -14,7 +14,7 @@ mutation.set_field("createRaid", create_raid_resolver)
 mutation.set_field("updateRaid", update_raid_resolver)
 mutation.set_field("deleteRaid", delete_raid_resolver)
 
-type_defs = load_schema_from_path("schema.graphql")
+type_defs = load_schema_from_path("src/api/schema.graphql")
 schema = make_executable_schema(
     type_defs, query, mutation, snake_case_fallback_resolvers
 )

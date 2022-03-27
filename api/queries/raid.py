@@ -1,4 +1,4 @@
-from .models import Raid
+from api.models import Raid
 from ariadne import convert_kwargs_to_snake_case
 
 def listRaids_resolver(obj, info):

@@ -6,11 +6,10 @@ from api import db
 from api.models import Raid
 
 @convert_kwargs_to_snake_case
-def create_raid_resolver(obj, info, name, start_time, end_time):
+def create_raid_resolver(obj, info, name, start_time, end_time, instance_id):
     try:
-        today = datetime.now(tz=ZoneInfo('America/New_York'))
         raid = Raid(
-            name=name, start_time=start_time, end_time=end_time, created_at=today, updated_at=today
+            name=name, start_time=start_time, end_time=end_time, instance_id=instance_id
         )
         db.session.add(raid)
         db.session.commit()
@@ -27,6 +26,7 @@ def update_raid_resolver(obj, info, id, name=None, start_time=None, end_time=Non
             raid.name = name or raid.name
             raid.start_time = start_time or raid.start_time
             raid.end_time = end_time or raid.end_time
+            raid.updated_at = datetime.now(tz=ZoneInfo('America/New_York'))
         db.session.add(raid)
         db.session.commit()
         payload = raid.to_dict()

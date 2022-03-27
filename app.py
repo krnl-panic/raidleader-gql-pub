@@ -3,18 +3,10 @@ from ariadne import load_schema_from_path, make_executable_schema, \
     graphql_sync, snake_case_fallback_resolvers, ObjectType
 from ariadne.constants import PLAYGROUND_HTML
 from flask import request, jsonify
-from api.mutations import create_raid_resolver, delete_raid_resolver, update_raid_resolver
-from api.queries import listRaids_resolver, getRaid_resolver
+from api.mutations import mutation
+from api.queries import query
 
-query = ObjectType("Query")
-mutation = ObjectType("Mutation")
-query.set_field("listRaids", listRaids_resolver)
-query.set_field("getRaid", getRaid_resolver)
-mutation.set_field("createRaid", create_raid_resolver)
-mutation.set_field("updateRaid", update_raid_resolver)
-mutation.set_field("deleteRaid", delete_raid_resolver)
-
-type_defs = load_schema_from_path("src/api/schema.graphql")
+type_defs = load_schema_from_path('api/schema.graphql')
 schema = make_executable_schema(
     type_defs, query, mutation, snake_case_fallback_resolvers
 )

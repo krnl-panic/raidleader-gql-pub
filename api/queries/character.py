@@ -1,0 +1,22 @@
+from api.models import Character
+from ariadne import convert_kwargs_to_snake_case
+
+@convert_kwargs_to_snake_case
+def listUserCharacters_resolver(obj, info, user_id):
+    try:
+        characters = [character.to_dict() for character in Character.query.filter_by(deleted_at=None, user_id=user_id).all()]
+        payload = characters
+    except Exception as error:
+        payload = None
+    return payload
+
+@convert_kwargs_to_snake_case
+def getCharacter_resolver(obj, info, id):
+    try:
+        payload = None
+        character = Character.query.get(id)
+        if character.deleted_at is None:
+            payload = character.to_dict()
+    except AttributeError:
+        payload = None
+    return payload

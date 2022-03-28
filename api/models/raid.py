@@ -7,7 +7,10 @@ class Raid(db.Model):
     start_time = db.Column(db.DateTime(timezone=True))
     end_time = db.Column(db.DateTime(timezone=True))
     instance_id = db.Column(db.Integer, db.ForeignKey('instance.id'), nullable=False)
+   
     instance = db.relationship('Instance', backref='raids', lazy=True)
+    auction_sessions = db.relationship('AuctionSession', backref='raid', lazy=True)
+    loots = db.relationship('Loot', backref='raid', lazy=True)
 
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
     updated_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())

@@ -2,14 +2,9 @@ from app import db
 
 class Auction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.Integer, db.ForeignKey('auction_session.id'))
 
-    raid_id = db.Column(db.Integer, db.ForeignKey('raid.id'))
-    winner_id = db.Column(db.Integer, db.ForeignKey('character.id'))
-    price = db.Column(db.Integer, default=0)
-
-    raid = db.relationship('Raid', backref='auctions', lazy=True)
-    winner = db.relationship('Character', backref='won_auctions', lazy=True)
-    loots = db.relationship('AuctionLoot', backref='auction', lazy=True)
+    loots = db.relationship('Loot', backref='auction', lazy=True)
 
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
     updated_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
@@ -18,10 +13,8 @@ class Auction(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "raid": self.raid.to_dict(),
-            "winner": self.winner.to_dict(),
+            "session": self.session.to_dict(),
             "loots": [loot.to_dict() for loot in self.loots],
-            "price": self.price,
             "createdAt": self.created_at,
             "updatedAt": self.updated_at,
             "deletedAt": self.deleted_at

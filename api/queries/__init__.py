@@ -6,6 +6,7 @@ from .item import *
 from .loot import *
 from .user import *
 from .character import *
+from .auction_session import *
 from .auction import *
 
 query = ObjectType('Query')
@@ -14,30 +15,37 @@ query = ObjectType('Query')
 query.set_field("listRaids", listRaids_resolver)
 query.set_field("getRaid", getRaid_resolver)
 
-# # Instance Queries
-# query.set_field("list", listInstances_resolver)
-# query.set_field("get", getInstance_resolver)
+# Instance Queries
+query.set_field("listInstances", listInstances_resolver)
+query.set_field("getInstance", getInstance_resolver)
 
-# # Boss Queries
-# query.set_field("list", listBosses_resolver)
-# query.set_field("get", getBoss_resolver)
+# Boss Queries
+query.set_field("listInstanceBosses", listInstanceBosses_resolver)
+query.set_field("getBoss", getBoss_resolver)
 
-# # Item Queries
-# query.set_field("list", listItems_resolver)
-# query.set_field("get", getItem_resolver)
+# Item Queries
+query.set_field("listBossItems", listBossItems_resolver)
+query.set_field("listRaidItems", listRaidItems_resolver)
+query.set_field("getItem", getItem_resolver)
 
-# # Loot Queries
-# query.set_field("list", listLoots_resolver)
-# query.set_field("get", getLoot_resolver)
+# Loot Queries
+query.set_field("listAuctionLoots", listAuctionLoots_resolver)
+query.set_field("listRaidLoots", listRaidLoots_resolver)
+query.set_field("getLoot", getLoot_resolver)
 
-# # User Queries
-# query.set_field("list", listUsers_resolver)
-# query.set_field("get", getUser_resolver)
+# User Queries
+query.set_field("listUsers", listUsers_resolver)
+query.set_field("getUser", getUser_resolver)
 
-# # Character Queries
-# query.set_field("list", listCharacters_resolver)
-# query.set_field("get", getCharacter_resolver)
+# Character Queries
+query.set_field("listUserCharacters", listUserCharacters_resolver)
+# query.set_field("listRaidCharacters", listRaidCharacters_resolver)
+query.set_field("getCharacter", getCharacter_resolver)
 
-# # Auction Queries
-# query.set_field("list", listAuctions_resolver)
-# query.set_field("get", getAuction_resolver)
+# AuctionSession Queries
+query.set_field("listRaidAuctionSessions", listRaidAuctionSessions_resolver)
+query.set_field("getAuctionSession", getAuctionSession_resolver)
+
+# Auction Queries
+query.set_field("listRaidAuctions", listRaidAuctions_resolver)
+query.set_field("getAuction", getAuction_resolver)

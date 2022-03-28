@@ -5,10 +5,9 @@ class Loot(db.Model):
 
     raid_id = db.Column(db.Integer, db.ForeignKey('raid.id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-    auction_id = db.Column(db.Integer, db.ForeignKey('auction.id'))
+    auction_id = db.Column(db.Integer, db.ForeignKey('auction.id'))   
 
-    raid = db.relationship('Raid', backref='loots', lazy=True)
-    item = db.relationship('Item', backref='loots', lazy=True)
+    item = db.relationship('Item', backref='loots', lazy=True) 
 
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
     updated_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())

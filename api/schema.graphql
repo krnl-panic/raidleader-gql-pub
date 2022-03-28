@@ -53,15 +53,20 @@ type Mutation {
   updateCharacter(id: ID!, playerClass: PlayerClass, userId: ID): Character!
   deleteCharacter(id: ID!): Character!
 
-  # Auction
-  createAuction(raidId: ID!): Auction!
-  updateAuction(id: ID!, raidId: ID, winnerId: ID, price: Int): Auction!
-  deleteAuction(id: ID!): Auction!
+  # AuctionSession
+  createAuctionSession(raidId: ID!): AuctionSession!
+  updateAuctionSession(
+    id: ID!
+    raidId: ID
+    winnerId: ID
+    price: Int
+  ): AuctionSession!
+  deleteAuctionSession(id: ID!): AuctionSession!
 
-  # AuctionLoot
-  createAuctionLoot(auctionId: ID!, lootId: ID!): AuctionLoot!
-  updateAuctionLoot(id: ID!, auctionId: ID, lootId: ID): AuctionLoot!
-  deleteAuctionLoot(id: ID!): AuctionLoot!
+  # Auction
+  createAuction(auctionId: ID!, lootId: ID!): Auction!
+  updateAuction(id: ID!, auctionId: ID, lootId: ID): Auction!
+  deleteAuction(id: ID!): Auction!
 }
 
 type Query {
@@ -74,15 +79,17 @@ type Query {
   getInstance(id: ID!): Instance
 
   # Boss
-  listBosses: [Boss!]
+  listInstanceBosses(instanceId: ID!): [Boss!]
   getBoss(id: ID!): Boss
 
   # Item
-  listItems: [Item!]
+  listBossItems(bossId: ID!): [Item!]
+  listRaidItems(raidId: ID!): [Item!]
   getItem(id: ID!): Item
 
   # Loot
-  listLoots: [Loot!]
+  listAuctionLoots(auctionId: ID!): [Loot!]
+  listRaidLoots(raidId: ID!): [Loot!]
   getLoot(id: ID!): Loot
 
   # User
@@ -90,16 +97,17 @@ type Query {
   getUser(id: ID!): User
 
   # Character
-  listCharacters: [Character!]
+  listUserCharacters(userId: ID!): [Character!]
+  # listRaidCharacters(raidId: ID!): [Character!]
   getCharacter(id: ID!): Character
 
-  # Auction
-  listAuctions: [Auction!]
-  getAuction(id: ID!): Auction
+  # AuctionSession
+  listRaidAuctionSessions(raidId: ID!): [AuctionSession!]
+  getAuctionSession(id: ID!): AuctionSession
 
-  # AuctionLoot
-  listAuctionLoots: [AuctionLoot!]
-  getAuctionLoot(id: ID!): AuctionLoot
+  # Auction
+  listRaidAuctions(raidId: ID!): [Auction!]
+  getAuction(id: ID!): Auction
 }
 
 type Raid {
@@ -170,20 +178,23 @@ type Character {
   deletedAt: String
 }
 
-type Auction {
+type AuctionSession {
   id: ID!
-  winner: Character
-  loots: [Loot!]!
-  price: Int!
+  auctions: [Auction!]!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
 }
 
-type AuctionLoot {
+type Auction {
   id: ID!
   auction: Auction!
   loot: Loot!
+  winner: Character
+  price: Int!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
 }
 
 enum PlayerRoleTags {

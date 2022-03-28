@@ -4,7 +4,6 @@ from ariadne import convert_kwargs_to_snake_case
 def listRaids_resolver(obj, info):
     try:
         raids = [raid.to_dict() for raid in Raid.query.filter_by(deleted_at=None).all()]
-        print(raids)
         payload = raids
     except Exception as error:
         payload = None

@@ -14,7 +14,7 @@ def create_raid_resolver(obj, info, name, start_time, end_time, instance_id):
         db.session.add(raid)
         db.session.commit()
         payload = raid.to_dict()
-    except ValueError:  # date format errors
+    except ValueError:  
         payload = None
     return payload
 
@@ -29,6 +29,7 @@ def update_raid_resolver(obj, info, id, name=None, start_time=None, end_time=Non
             raid.updated_at = datetime.now(tz=ZoneInfo('America/New_York'))
         db.session.add(raid)
         db.session.commit()
+        
         payload = raid.to_dict()
     except AttributeError:
         payload = None

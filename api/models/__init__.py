@@ -3,7 +3,7 @@ from .instance import Instance
 from .boss import Boss
 from .item import Item
 from .loot import Loot
-from .auction import Auction
+from .auction_session import AuctionSession
 from .user import User
 from .character import Character
-from .auction_loot import AuctionLoot
+from .auction import Auction

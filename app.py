@@ -1,4 +1,3 @@
-import asyncio
 from api import app, db
 from api.context import get_graphql_context
 

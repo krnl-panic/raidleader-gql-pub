@@ -27,6 +27,7 @@ python-dotenv = "*"
 alembic = "*"
 aiodataloader = "*"
 aioflask = "*"
+colorama = "*"
 
 [dev-packages]
 pylint = "*"

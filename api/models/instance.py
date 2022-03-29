@@ -1,4 +1,5 @@
 from app import db
+from aiodataloader import DataLoader
 
 class Instance(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,3 +20,11 @@ class Instance(db.Model):
             "updatedAt": self.updated_at,
             "deletedAt": self.deleted_at
         }
+
+    @classmethod
+    def loader(self):
+        return InstanceLoader()
+
+class InstanceLoader(DataLoader):
+    async def batch_load_fn(self, keys):
+        return await Instance.batch_loader(keys)

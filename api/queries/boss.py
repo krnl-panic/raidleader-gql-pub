@@ -14,7 +14,8 @@ def listInstanceBosses_resolver(obj, info, instance_id):
 def getBoss_resolver(obj, info, id):
     try:
         payload = None
-        boss = Boss.query.get(id)
+        dataloader = info.context['_boss__loader']
+        boss = dataloader.load(id)
         if boss.deleted_at is None:
             payload = boss.to_dict()
     except AttributeError:

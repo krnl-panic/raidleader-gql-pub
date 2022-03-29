@@ -1,6 +1,9 @@
+import asyncio
 from api import app, db
+from api.context import get_graphql_context
+
 from ariadne import load_schema_from_path, make_executable_schema, \
-    graphql_sync, snake_case_fallback_resolvers, ObjectType
+    graphql, snake_case_fallback_resolvers, ObjectType
 from ariadne.constants import PLAYGROUND_HTML
 from flask import request, jsonify
 from api.mutations import mutation
@@ -15,12 +18,12 @@ def graphql_playground():
     return PLAYGROUND_HTML, 200
 
 @app.route("/graphql", methods=["POST"])
-def graphql_server():
+async def graphql_server():
     data = request.get_json()
-    success, result = graphql_sync(
+    success, result = await graphql(
         schema,
         data,
-        context_value=request,
+        context_value=get_graphql_context(request),
         debug=app.debug
     )
     status_code = 200 if success else 400

@@ -23,9 +23,10 @@ def listRaidLoots_resolver(obj, info, raid_id):
 def getLoot_resolver(obj, info, id):
     try:
         payload = None
-        loot = Loot.query.get(id)
-        if loot.deleted_at is None:
-            payload = loot.to_dict()
+        dataloader = info.context['_loot__loader']
+        object = dataloader.load(id)
+        if object.deleted_at is None:
+            payload = object.to_dict()
     except AttributeError:
         payload = None
     return payload

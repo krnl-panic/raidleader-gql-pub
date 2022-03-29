@@ -14,7 +14,8 @@ def listUserCharacters_resolver(obj, info, user_id):
 def getCharacter_resolver(obj, info, id):
     try:
         payload = None
-        character = Character.query.get(id)
+        dataloader = info.context['_character__loader']
+        character = dataloader.load(id)
         if character.deleted_at is None:
             payload = character.to_dict()
     except AttributeError:

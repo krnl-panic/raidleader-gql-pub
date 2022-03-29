@@ -1,4 +1,5 @@
 from app import db
+from aiodataloader import DataLoader
 
 class Auction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,3 +20,11 @@ class Auction(db.Model):
             "updatedAt": self.updated_at,
             "deletedAt": self.deleted_at
         }
+
+    @classmethod
+    def loader(self):
+        return AuctionLoader()
+
+class AuctionLoader(DataLoader):
+    async def batch_load_fn(self, keys):
+        return await Auction.batch_loader(keys)

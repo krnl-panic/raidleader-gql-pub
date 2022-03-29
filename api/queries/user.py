@@ -13,9 +13,10 @@ def listUsers_resolver(obj, info):
 def getUser_resolver(obj, info, id):
     try:
         payload = None
-        user = User.query.get(id)
-        if user.deleted_at is None:
-            payload = user.to_dict()
+        dataloader = info.context['_user__loader']
+        object = dataloader.load(id)
+        if object.deleted_at is None:
+            payload = object.to_dict()
     except AttributeError:
         payload = None
     return payload

@@ -13,9 +13,10 @@ def listRaids_resolver(obj, info):
 def getRaid_resolver(obj, info, id):
     try:
         payload = None
-        raid = Raid.query.get(id)
-        if raid.deleted_at is None:
-            payload = raid.to_dict()
+        dataloader = info.context['_raid__loader']
+        object = dataloader.load(id)
+        if object.deleted_at is None:
+            payload = object.to_dict()
     except AttributeError:
         payload = None
     return payload

@@ -1,4 +1,5 @@
 from app import db
+from aiodataloader import DataLoader
 import enum
 
 class PlayerClassEnum(enum.Enum):
@@ -34,3 +35,11 @@ class Character(db.Model):
             "updatedAt": self.updated_at,
             "deletedAt": self.deleted_at
         }
+
+    @classmethod
+    def loader(self):
+        return CharacterLoader()
+
+class CharacterLoader(DataLoader):
+    async def batch_load_fn(self, keys):
+        return await Character.batch_loader(keys)

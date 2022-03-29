@@ -1,4 +1,5 @@
 from app import db
+from aiodataloader import DataLoader
 
 class Loot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -22,3 +23,11 @@ class Loot(db.Model):
             "updatedAt": self.updated_at,
             "deletedAt": self.deleted_at
         }
+
+    @classmethod
+    def loader(self):
+        return LootLoader()
+
+class LootLoader(DataLoader):
+    async def batch_load_fn(self, keys):
+        return await Loot.batch_loader(keys)

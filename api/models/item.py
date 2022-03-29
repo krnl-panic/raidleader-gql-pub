@@ -1,4 +1,5 @@
 from app import db
+from aiodataloader import DataLoader
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -27,3 +28,11 @@ class Item(db.Model):
             "updatedAt": self.updated_at,
             "deletedAt": self.deleted_at
         }
+
+    @classmethod
+    def loader(self):
+        return ItemLoader()
+
+class ItemLoader(DataLoader):
+    async def batch_load_fn(self, keys):
+        return await Item.batch_loader(keys)

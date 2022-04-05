@@ -1,9 +1,13 @@
 # context.py
 from typing import Dict
+
 from aiodataloader import DataLoader
+
 from api.models import *
 
+
 def construct_dataloaders() -> Dict[str, DataLoader]:
+    """ """
     dataloaders = {"_instance__loader": Instance.loader()}
     dataloaders = {"_boss__loader": Boss.loader()}
     dataloaders = {"_item__loader": Item.loader()}
@@ -15,5 +19,11 @@ def construct_dataloaders() -> Dict[str, DataLoader]:
     dataloaders = {"_auction__loader": Auction.loader()}
     return dataloaders
 
+
 def get_graphql_context(request) -> Dict[str, Dict[str, DataLoader]]:
+    """
+
+    :param request: 
+
+    """
     return {"dataloaders": construct_dataloaders(), "request": request}

@@ -30,7 +30,10 @@ aioflask = "*"
 colorama = "*"
 
 [dev-packages]
+bandit = "*"
+autopep8 = "*"
 pylint = "*"
+pyment = "*"
 
 [requires]
 python_version = "3.9"

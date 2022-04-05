@@ -1,13 +1,11 @@
 """create initial model tables
 
 Revision ID: c5209db0c4d7
-Revises: 
+Revises:
 Create Date: 2022-03-26 16:45:03.940900
 
 """
 from alembic import op
-import sqlalchemy as sa
-
 
 # revision identifiers, used by Alembic.
 revision = 'c5209db0c4d7'
@@ -17,6 +15,7 @@ depends_on = None
 
 
 def upgrade():
+    """ """
     op.execute(
         """
         BEGIN;
@@ -148,16 +147,17 @@ def upgrade():
                 FOREIGN KEY(loot_id) REFERENCES loot (id)
         );
         END;
-        """       
+        """
     )
 
 
 def downgrade():
+    """ """
     op.execute(
         """
         BEGIN;
         DROP TABLE IF EXISTS "auction_loot";
-        END;    
+        END;
         BEGIN;
         DROP TABLE IF EXISTS "loot";
         END;

@@ -1,7 +1,10 @@
-from app import db
 from aiodataloader import DataLoader
 
+from app import db
+
+
 class Item(db.Model):
+    """ """
     id = db.Column(db.Integer, primary_key=True)
 
     name = db.Column(db.String(128), nullable=False)
@@ -12,11 +15,20 @@ class Item(db.Model):
 
     instance = db.relationship('Instance', backref='items', lazy=True)
 
-    created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
+    created_at = db.Column(
+        db.DateTime(
+            timezone=True),
+        nullable=False,
+        server_default=db.func.now())
+    updated_at = db.Column(
+        db.DateTime(
+            timezone=True),
+        nullable=False,
+        server_default=db.func.now())
     deleted_at = db.Column(db.DateTime(timezone=True))
-    
+
     def to_dict(self):
+        """ """
         return {
             "id": self.id,
             "name": self.name,
@@ -31,8 +43,12 @@ class Item(db.Model):
 
     @classmethod
     def loader(self):
+        """ """
         return ItemLoader()
 
+
 class ItemLoader(DataLoader):
+    """ """
+
     async def batch_load_fn(self, keys):
         return await Item.batch_loader(keys)

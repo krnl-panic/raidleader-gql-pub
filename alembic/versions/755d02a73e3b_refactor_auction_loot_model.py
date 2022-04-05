@@ -5,9 +5,8 @@ Revises: 8152a6203f42
 Create Date: 2022-03-27 18:10:53.796693
 
 """
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = '755d02a73e3b'
@@ -17,6 +16,7 @@ depends_on = None
 
 
 def upgrade():
+    """ """
     op.drop_column('auction_session', 'winner_id')
     op.drop_column('auction_session', 'price')
 
@@ -26,12 +26,13 @@ def upgrade():
         'session_id',
         sa.Integer,
         sa.ForeignKey('auction_session.id'),
-          nullable=False
+        nullable=False
     ))
     op.rename_table('auction_loot', 'auction')
 
 
 def downgrade():
+    """ """
     op.drop_column('auction', 'session_id')
     op.add_column('auction', sa.Column(
         'auction_id',
@@ -56,4 +57,3 @@ def downgrade():
         sa.Integer,
         sa.ForeignKey('character.id')
     ))
-

@@ -1,7 +1,7 @@
 DROP TYPE IF EXISTS playerclassenum;
 BEGIN;
 DROP TABLE IF EXISTS "auction_loot";
-END;    
+END;
 BEGIN;
 DROP TABLE IF EXISTS "loot";
 END;

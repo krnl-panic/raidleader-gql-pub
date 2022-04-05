@@ -1,12 +1,25 @@
 # mutations.py
 from datetime import datetime
 from zoneinfo import ZoneInfo
+
 from ariadne import convert_kwargs_to_snake_case
+
 from api import db
 from api.models import Raid
 
+
 @convert_kwargs_to_snake_case
 def create_raid_resolver(obj, info, name, start_time, end_time, instance_id):
+    """
+
+    :param obj: 
+    :param info: 
+    :param name: 
+    :param start_time: 
+    :param end_time: 
+    :param instance_id: 
+
+    """
     try:
         raid = Raid(
             name=name, start_time=start_time, end_time=end_time, instance_id=instance_id
@@ -14,12 +27,24 @@ def create_raid_resolver(obj, info, name, start_time, end_time, instance_id):
         db.session.add(raid)
         db.session.commit()
         payload = raid.to_dict()
-    except ValueError:  
+    except ValueError:
         payload = None
     return payload
 
+
 @convert_kwargs_to_snake_case
-def update_raid_resolver(obj, info, id, name=None, start_time=None, end_time=None):
+def update_raid_resolver(obj, info, id, name=None,
+                         start_time=None, end_time=None):
+    """
+
+    :param obj: 
+    :param info: 
+    :param id: 
+    :param name:  (Default value = None)
+    :param start_time:  (Default value = None)
+    :param end_time:  (Default value = None)
+
+    """
     try:
         raid = Raid.query.filter_by(deleted_at=None, id=id).all()
         if raid:
@@ -29,22 +54,30 @@ def update_raid_resolver(obj, info, id, name=None, start_time=None, end_time=Non
             raid.updated_at = datetime.now(tz=ZoneInfo('America/New_York'))
         db.session.add(raid)
         db.session.commit()
-        
+
         payload = raid.to_dict()
     except AttributeError:
         payload = None
     return payload
 
+
 @convert_kwargs_to_snake_case
 def delete_raid_resolver(obj, info, id):
-    try:        
+    """
+
+    :param obj: 
+    :param info: 
+    :param id: 
+
+    """
+    try:
         raid = Raid.query.get(id)
-        
+
         if raid and raid.deleted_at is None:
             raid.deleted_at = datetime.now(tz=ZoneInfo('America/New_York'))
             db.session.add(raid)
             db.session.commit()
-            
+
         payload = raid.to_dict()
     except AttributeError:
         payload = None

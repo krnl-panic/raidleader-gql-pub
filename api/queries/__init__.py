@@ -1,13 +1,14 @@
 from ariadne import ObjectType
-from .raid import *
-from .instance import *
+
+from .auction import *
+from .auction_session import *
 from .boss import *
+from .character import *
+from .instance import *
 from .item import *
 from .loot import *
+from .raid import *
 from .user import *
-from .character import *
-from .auction_session import *
-from .auction import *
 
 query = ObjectType('Query')
 

@@ -1,13 +1,15 @@
-from flask_sqlalchemy import Model
+from flask_sqlalchemy import Model as SQLModel
 
-class Model(Model):
+
+class Model(SQLModel):
+    """ """
+
     @classmethod
-    async def batch_loader(keys):
-        Model = __class__
+    async def batch_loader(cls, keys):
         print(Model.__name__)
         return [
-            instance.to_dict() 
-            for instance in Model.query.filter(
-                Model.id.in_(keys) and Model.deleted_at is None
+            instance.to_dict()
+            for instance in cls.query.filter(
+                cls.id.in_(keys) and cls.deleted_at is None
             ).all()
         ]

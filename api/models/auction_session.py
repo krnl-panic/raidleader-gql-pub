@@ -1,17 +1,29 @@
-from app import db
 from aiodataloader import DataLoader
 
+from app import db
+
+
 class AuctionSession(db.Model):
+    """ """
     id = db.Column(db.Integer, primary_key=True)
     raid_id = db.Column(db.Integer, db.ForeignKey('raid.id'))
 
     auctions = db.relationship('Auction', backref='session', lazy=True)
 
-    created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
+    created_at = db.Column(
+        db.DateTime(
+            timezone=True),
+        nullable=False,
+        server_default=db.func.now())
+    updated_at = db.Column(
+        db.DateTime(
+            timezone=True),
+        nullable=False,
+        server_default=db.func.now())
     deleted_at = db.Column(db.DateTime(timezone=True))
-    
+
     def to_dict(self):
+        """ """
         return {
             "id": self.id,
             "raid": self.raid.to_dict(),
@@ -20,10 +32,15 @@ class AuctionSession(db.Model):
             "updatedAt": self.updated_at,
             "deletedAt": self.deleted_at
         }
-    
+
     @classmethod
     def loader(self):
+        """ """
         return AuctionSessionLoader()
+
+
 class AuctionSessionLoader(DataLoader):
+    """ """
+
     async def batch_load_fn(self, keys):
         return await AuctionSession.batch_loader(keys)

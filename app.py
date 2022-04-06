@@ -1,14 +1,15 @@
+from api import app, db
+from api.context import get_graphql_context
+
 from ariadne import (
     load_schema_from_path,
     make_executable_schema,
     graphql,
     snake_case_fallback_resolvers,
+    ObjectType,
 )
 from ariadne.constants import PLAYGROUND_HTML
 from flask import request, jsonify
-
-from api import app
-from api.context import get_graphql_context
 from api.mutations import mutation
 from api.queries import query
 

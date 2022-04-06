@@ -1,21 +1,19 @@
 # mutations.py
 from datetime import datetime
 from zoneinfo import ZoneInfo
-
 from ariadne import convert_kwargs_to_snake_case
-
 from api import db
 from api.models import Loot
 
 
 @convert_kwargs_to_snake_case
-def create_loot_resolver(obj, info, raid_id, item_id):
+def create_loot_resolver(_, info, raid_id, item_id):
     """
 
-    :param obj: 
-    :param info: 
-    :param raid_id: 
-    :param item_id: 
+    :param _:
+    :param info:
+    :param raid_id:
+    :param item_id:
 
     """
     try:
@@ -29,15 +27,15 @@ def create_loot_resolver(obj, info, raid_id, item_id):
 
 
 @convert_kwargs_to_snake_case
-def update_loot_resolver(obj, info, id, raid_id, item_id, auction_id):
+def update_loot_resolver(_, info, id, raid_id, item_id, auction_id):
     """
 
-    :param obj: 
-    :param info: 
-    :param id: 
-    :param raid_id: 
-    :param item_id: 
-    :param auction_id: 
+    :param _:
+    :param info:
+    :param id:
+    :param raid_id:
+    :param item_id:
+    :param auction_id:
 
     """
     try:
@@ -56,19 +54,19 @@ def update_loot_resolver(obj, info, id, raid_id, item_id, auction_id):
 
 
 @convert_kwargs_to_snake_case
-def delete_loot_resolver(obj, info, id):
+def delete_loot_resolver(_, info, id):
     """
 
-    :param obj: 
-    :param info: 
-    :param id: 
+    :param _:
+    :param info:
+    :param id:
 
     """
     try:
         loot = Loot.query.get(id)
 
         if loot and loot.deleted_at is None:
-            loot.deleted_at = datetime.now(tz=ZoneInfo('America/New_York'))
+            loot.deleted_at = datetime.now(tz=ZoneInfo("America/New_York"))
             db.session.add(loot)
             db.session.commit()
 

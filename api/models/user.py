@@ -1,26 +1,22 @@
-from aiodataloader import DataLoader
-
 from app import db
+from aiodataloader import DataLoader
 
 
 class User(db.Model):
     """ """
+
     id = db.Column(db.Integer, primary_key=True)
 
     discord_id = db.Column(db.BigInteger, nullable=False)
     discord_username = db.Column(db.String, nullable=False)
-    characters = db.relationship('Character', backref='user', lazy=True)
+    characters = db.relationship("Character", backref="user", lazy=True)
 
     created_at = db.Column(
-        db.DateTime(
-            timezone=True),
-        nullable=False,
-        server_default=db.func.now())
+        db.DateTime(timezone=True), nullable=False, server_default=db.func.now()
+    )
     updated_at = db.Column(
-        db.DateTime(
-            timezone=True),
-        nullable=False,
-        server_default=db.func.now())
+        db.DateTime(timezone=True), nullable=False, server_default=db.func.now()
+    )
     deleted_at = db.Column(db.DateTime(timezone=True))
 
     def to_dict(self):
@@ -32,11 +28,11 @@ class User(db.Model):
             "characters": self.characters,
             "createdAt": self.created_at,
             "updatedAt": self.updated_at,
-            "deletedAt": self.deleted_at
+            "deletedAt": self.deleted_at,
         }
 
-    @classmethod
-    def loader(self):
+    @staticmethod
+    def loader():
         """ """
         return UserLoader()
 

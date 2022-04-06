@@ -1,21 +1,19 @@
 # mutations.py
 from datetime import datetime
 from zoneinfo import ZoneInfo
-
 from ariadne import convert_kwargs_to_snake_case
-
 from api import db
 from api.models import Auction
 
 
 @convert_kwargs_to_snake_case
-def create_auction_resolver(obj, info, raid_id, loot_id):
+def create_auction_resolver(_, info, raid_id, loot_id):
     """
 
-    :param obj: 
-    :param info: 
-    :param raid_id: 
-    :param loot_id: 
+    :param _:
+    :param info:
+    :param raid_id:
+    :param loot_id:
 
     """
     try:
@@ -29,14 +27,14 @@ def create_auction_resolver(obj, info, raid_id, loot_id):
 
 
 @convert_kwargs_to_snake_case
-def update_auction_resolver(obj, info, id, raid_id, loot_id):
+def update_auction_resolver(_, info, id, raid_id, loot_id):
     """
 
-    :param obj: 
-    :param info: 
-    :param id: 
-    :param raid_id: 
-    :param loot_id: 
+    :param _:
+    :param info:
+    :param id:
+    :param raid_id:
+    :param loot_id:
 
     """
     try:
@@ -54,19 +52,19 @@ def update_auction_resolver(obj, info, id, raid_id, loot_id):
 
 
 @convert_kwargs_to_snake_case
-def delete_auction_resolver(obj, info, id):
+def delete_auction_resolver(_, info, id):
     """
 
-    :param obj: 
-    :param info: 
-    :param id: 
+    :param _:
+    :param info:
+    :param id:
 
     """
     try:
         auction = Auction.query.get(id)
 
         if auction and auction.deleted_at is None:
-            auction.deleted_at = datetime.now(tz=ZoneInfo('America/New_York'))
+            auction.deleted_at = datetime.now(tz=ZoneInfo("America/New_York"))
             db.session.add(auction)
             db.session.commit()
 

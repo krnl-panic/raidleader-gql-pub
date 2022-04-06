@@ -1,16 +1,18 @@
 from ariadne import ObjectType
+from .raid import listRaids_resolver, getRaid_resolver
+from .instance import listInstances_resolver, getInstance_resolver, instance
+from .boss import listInstanceBosses_resolver, getBoss_resolver, boss
+from .item import listRaidItems_resolver, listBossItems_resolver, getItem_resolver
+from .loot import listRaidLoots_resolver, listAuctionLoots_resolver, getLoot_resolver
+from .user import listUsers_resolver, getUser_resolver
+from .character import listUserCharacters_resolver, getCharacter_resolver
+from .auction_session import (
+    listRaidAuctionSessions_resolver,
+    getAuctionSession_resolver,
+)
+from .auction import listRaidAuctions_resolver, getAuction_resolver
 
-from .auction import *
-from .auction_session import *
-from .boss import *
-from .character import *
-from .instance import *
-from .item import *
-from .loot import *
-from .raid import *
-from .user import *
-
-query = ObjectType('Query')
+query = ObjectType("Query")
 
 # Raid Queries
 query.set_field("listRaids", listRaids_resolver)

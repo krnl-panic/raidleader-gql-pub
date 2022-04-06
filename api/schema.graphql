@@ -114,6 +114,7 @@ type Raid {
   id: ID!
   name: String!
   instance: Instance!
+  loots: [Loot!]!
   startTime: String!
   endTime: String!
   createdAt: String!
@@ -188,7 +189,7 @@ type AuctionSession {
 
 type Auction {
   id: ID!
-  auction: Auction!
+  session: AuctionSession!
   loot: Loot!
   winner: Character
   price: Int!

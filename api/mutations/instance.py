@@ -1,20 +1,18 @@
 # mutations.py
 from datetime import datetime
 from zoneinfo import ZoneInfo
-
 from ariadne import convert_kwargs_to_snake_case
-
 from api import db
 from api.models import Instance
 
 
 @convert_kwargs_to_snake_case
-def create_instance_resolver(obj, info, name):
+def create_instance_resolver(_, info, name):
     """
 
-    :param obj: 
-    :param info: 
-    :param name: 
+    :param _:
+    :param info:
+    :param name:
 
     """
     try:
@@ -28,13 +26,13 @@ def create_instance_resolver(obj, info, name):
 
 
 @convert_kwargs_to_snake_case
-def update_instance_resolver(obj, info, id, name):
+def update_instance_resolver(_, info, id, name):
     """
 
-    :param obj: 
-    :param info: 
-    :param id: 
-    :param name: 
+    :param _:
+    :param info:
+    :param id:
+    :param name:
 
     """
     try:
@@ -51,19 +49,19 @@ def update_instance_resolver(obj, info, id, name):
 
 
 @convert_kwargs_to_snake_case
-def delete_instance_resolver(obj, info, id):
+def delete_instance_resolver(_, info, id):
     """
 
-    :param obj: 
-    :param info: 
-    :param id: 
+    :param _:
+    :param info:
+    :param id:
 
     """
     try:
         instance = Instance.query.get(id)
 
         if instance and instance.deleted_at is None:
-            instance.deleted_at = datetime.now(tz=ZoneInfo('America/New_York'))
+            instance.deleted_at = datetime.now(tz=ZoneInfo("America/New_York"))
             db.session.add(instance)
             db.session.commit()
 

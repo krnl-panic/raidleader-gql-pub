@@ -8,7 +8,7 @@ Create Date: 2022-03-26 16:45:03.940900
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = 'c5209db0c4d7'
+revision = "c5209db0c4d7"
 down_revision = None
 branch_labels = None
 depends_on = None

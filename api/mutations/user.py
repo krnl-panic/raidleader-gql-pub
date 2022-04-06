@@ -1,21 +1,19 @@
 # mutations.py
 from datetime import datetime
 from zoneinfo import ZoneInfo
-
 from ariadne import convert_kwargs_to_snake_case
-
 from api import db
 from api.models import User
 
 
 @convert_kwargs_to_snake_case
-def create_user_resolver(obj, info, discord_id, discord_username):
+def create_user_resolver(_, info, discord_id, discord_username):
     """
 
-    :param obj: 
-    :param info: 
-    :param discord_id: 
-    :param discord_username: 
+    :param _:
+    :param info:
+    :param discord_id:
+    :param discord_username:
 
     """
     try:
@@ -29,14 +27,14 @@ def create_user_resolver(obj, info, discord_id, discord_username):
 
 
 @convert_kwargs_to_snake_case
-def update_user_resolver(obj, info, id, discord_id, discord_username):
+def update_user_resolver(_, info, id, discord_id, discord_username):
     """
 
-    :param obj: 
-    :param info: 
-    :param id: 
-    :param discord_id: 
-    :param discord_username: 
+    :param _:
+    :param info:
+    :param id:
+    :param discord_id:
+    :param discord_username:
 
     """
     try:
@@ -54,19 +52,19 @@ def update_user_resolver(obj, info, id, discord_id, discord_username):
 
 
 @convert_kwargs_to_snake_case
-def delete_user_resolver(obj, info, id):
+def delete_user_resolver(_, info, id):
     """
 
-    :param obj: 
-    :param info: 
-    :param id: 
+    :param _:
+    :param info:
+    :param id:
 
     """
     try:
         user = User.query.get(id)
 
         if user and user.deleted_at is None:
-            user.deleted_at = datetime.now(tz=ZoneInfo('America/New_York'))
+            user.deleted_at = datetime.now(tz=ZoneInfo("America/New_York"))
             db.session.add(user)
             db.session.commit()
 

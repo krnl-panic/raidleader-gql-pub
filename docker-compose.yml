@@ -1,0 +1,21 @@
+# docker-compose.yml
+version: "3.8"
+
+networks:
+  raidleader:
+    name: raidleader
+
+services:
+  server:
+    image: "michaelfay/raidleader_gql:${GITHUB_SHA}"
+    container_name: raidleader_gql
+    build: .
+    hostname: raidleader_gql
+    networks:
+      - raidleader
+    ports:
+      - "42069:42069"
+    restart: always
+    environment:
+      ENV: PRODUCTION
+      DATABASE_URI: "${DATABASE_URI}"

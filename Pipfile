@@ -13,6 +13,9 @@ flask-cors = "*"
 python-dotenv = "*"
 psycopg2-binary = "*"
 alembic = "*"
+flask-script = "*"
+aiodataloader = "*"
+waitress = "*"
 
 [dev-packages]
 bandit = "*"
@@ -20,6 +23,8 @@ pyment = "*"
 pylint = "*"
 black = "*"
 autopep8 = "*"
+setuptools = "*"
+wheel = "*"
 
 [requires]
 python_version = "3.9"

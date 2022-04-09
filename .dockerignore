@@ -1,0 +1,10 @@
+# Ignore everything
+**
+
+# ... except for dependencies and source
+!Pipfile
+!Pipfile.lock
+!raidleader_gql/
+!app.py
+!scripts/
+!dist/

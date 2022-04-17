@@ -14,6 +14,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Create .env
+      run: echo 'DB_DSN="${{ secrets.DB_DSN }}"' >> .env
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag "michaelfay/raidleader_gql:$GITHUB_SHA"
     - name: Log in to Docker Hub

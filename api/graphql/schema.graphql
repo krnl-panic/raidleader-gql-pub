@@ -1,0 +1,192 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Mutation {
+    # Raid
+    createRaid(
+        name: String!
+        startTime: String!
+        endTime: String!
+        createdAt: String
+    ): Raid!
+    updateRaid(id: ID!, name: String, startTime: String, endTime: String): Raid!
+    deleteRaid(id: ID!): Raid!
+
+    # Instance
+    createInstance(name: String!): Instance!
+    updateInstance(id: ID!, name: String!): Instance!
+    deleteInstance(id: ID!): Instance!
+
+    # Boss
+    createBoss(name: String!, instanceId: ID!): Boss!
+    updateBoss(id: ID!, name: String, instanceId: ID): Boss!
+    deleteBoss(id: ID!): Boss!
+
+    # Item
+    createItem(
+        name: String!
+        bossId: ID
+        instanceId: ID
+        wowheadUrl: String!
+    ): Item!
+    updateItem(id: ID!, bossId: ID, instanceId: ID, wowheadUrl: String): Item!
+    deleteItem(id: ID!): Item!
+
+    # Loot
+    createLoot(raidId: ID!, itemId: ID!): Loot!
+    updateLoot(id: ID!, raidId: ID, itemId: ID, auctionId: ID): Loot!
+    deleteLoot(id: ID!): Loot!
+
+    # User
+    createUser(discordId: ID!, discordUsername: String!): User!
+    updateUser(id: ID!, discordId: ID, discordUsername: String): User!
+    deleteUser(id: ID!): User!
+
+    # Character
+    createCharacter(
+        name: String!
+        playerClass: PlayerClass!
+        userId: ID!
+    ): Character!
+    updateCharacter(id: ID!, playerClass: PlayerClass, userId: ID): Character!
+    deleteCharacter(id: ID!): Character!
+
+    # AuctionSession
+    createAuctionSession(raidId: ID!): AuctionSession!
+    updateAuctionSession(
+        id: ID!
+        raidId: ID
+        winnerId: ID
+        price: Int
+    ): AuctionSession!
+    deleteAuctionSession(id: ID!): AuctionSession!
+
+    # Auction
+    createAuction(auctionId: ID!, lootId: ID!): Auction!
+    updateAuction(id: ID!, auctionId: ID, lootId: ID): Auction!
+    deleteAuction(id: ID!): Auction!
+}
+
+type Query {
+    # Raid
+    listRaids: [Raid!]
+    getRaid(id: ID!): Raid
+
+    # Instance
+    listInstances: [Instance!]
+    getInstance(id: ID!): Instance
+
+    # Boss
+    listInstanceBosses(instanceId: ID!): [Boss!]
+    getBoss(id: ID!): Boss
+
+    # Item
+    listBossItems(bossId: ID!): [Item!]
+    listRaidItems(raidId: ID!): [Item!]
+    getItem(id: ID!): Item
+
+    # Loot
+    listAuctionLoots(auctionId: ID!): [Loot!]
+    listRaidLoots(raidId: ID!): [Loot!]
+    getLoot(id: ID!): Loot
+
+    # User
+    listUsers: [User!]
+    getUser(id: ID!): User
+
+    # Character
+    listUserCharacters(userId: ID!): [Character!]
+    # listRaidCharacters(raidId: ID!): [Character!]
+    getCharacter(id: ID!): Character
+
+    # AuctionSession
+    listRaidAuctionSessions(raidId: ID!): [AuctionSession!]
+    getAuctionSession(id: ID!): AuctionSession
+
+    # Auction
+    listRaidAuctions(raidId: ID!): [Auction!]
+    getAuction(id: ID!): Auction
+}
+
+type Raid {
+    id: ID!
+    name: String!
+    loots: [Loot!]!
+    auctions: [AuctionSession!]!
+    startTime: String!
+    endTime: String!
+}
+
+type Instance {
+    id: ID!
+    name: String!
+    bosses: [Boss!]!
+}
+
+type Boss {
+    id: ID!
+    name: String!
+    instance: Instance!
+    items: [Item!]!
+}
+
+type Item {
+    id: ID!
+    name: String!
+    wowheadUrl: String
+    boss: Boss
+}
+
+type Loot {
+    id: ID!
+    #  raid: Raid!
+    #  item: Item!
+}
+
+type User {
+    id: ID!
+    characters: [Character!]!
+}
+
+type Character {
+    id: ID!
+    name: String!
+    playerClass: PlayerClass!
+}
+
+type AuctionSession {
+    id: ID!
+    auctions: [Auction!]!
+}
+
+type Auction {
+    id: ID!
+    session: AuctionSession!
+    loots: [Loot!]!
+    winner: Character
+    price: Int!
+}
+
+enum PlayerRoleTags {
+    TANK
+    HEALER
+    RANGED
+    MELEE
+    CASTER
+    PHYSICAL
+}
+
+enum PlayerClass {
+    druid
+    mage
+    hunter
+    rogue
+    shaman
+    paladin
+    priest
+    warrior
+    warlock
+    deathknight
+}

@@ -14,8 +14,8 @@ services:
     networks:
       - raidleader
     ports:
-      - "42069:42069"
+      - "42069:8000"
     restart: always
     environment:
       ENV: PRODUCTION
-      DATABASE_URI: "${DATABASE_URI}"
+      DB_DSN: "${DB_DSN}"

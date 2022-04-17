@@ -2,9 +2,12 @@
 **
 
 # ... except for dependencies and source
-!Pipfile
-!Pipfile.lock
-!raidleader_gql/
-!app.py
+!.env
+!alembic/
+!api/
+!asgi.py
 !scripts/
 !dist/
+!poetry.lock
+!pyproject.toml
+!alembic.ini

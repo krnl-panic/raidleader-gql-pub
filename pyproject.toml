@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "raidleader-gql"
+version = "0.1.0"
+description = "GraphQL API Server for raidleader.io."
+authors = ["Michael Fay <mike@michaelfay.io>"]
+license = "LICENSE"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+aiodataloader = "^0.2.1"
+python-dotenv = "^0.20.0"
+asyncio = "^3.4.3"
+ariadne = "^0.15.0"
+uvicorn = {version = "<0.16.0", extras = ["standard"]}
+gunicorn = "^20.1.0"
+fastapi = {extras = ["all"], version = "^0.75.1"}
+gino = {extras = ["pg", "starlette"], version = "^1.0.1"}
+alembic = "^1.7.7"
+asyncpg = "^0.25.0"
+SQLAlchemy = "<1.4"
+
+[tool.poetry.dev-dependencies]
+bandit = "^1.7.4"
+pyment = "^0.3.3"
+black = "^22.3.0"
+pylint = "^2.13.5"
+pytest = "^7.1.1"
+requests = "^2.27.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

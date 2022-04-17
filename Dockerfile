@@ -9,30 +9,22 @@ ENV PYTHONFAULTHANDLER 1
 ENV FLASK_APP src/app.py
 ENV FLASK_ENV production
 
-FROM base AS python-deps
-
-# Install pipenv and compilation dependencies
-RUN pip install pipenv
+FROM base AS raidleader-gql
 RUN apt-get update && apt-get install -y --no-install-recommends gcc
 
-COPY Pipfile .
-COPY Pipfile.lock .
-RUN PIPENV_VENV_IN_PROJECT=1 pipenv install
+RUN python -m pip install poetry
 
-FROM base AS runtime
+COPY pyproject.toml .
+COPY poetry.lock .
 
-# Copy virtual env from python-deps stage
-COPY --from=python-deps /.venv /.venv
-ENV PATH="/.venv/bin:$PATH"
+RUN python -m poetry config virtualenvs.create false
+RUN python -m poetry install --no-dev
 
-# Create and switch to a new user
-RUN useradd --create-home raidleader
-WORKDIR /home/raidleader
-USER raidleader
+RUN mkdir /app
+WORKDIR /app
 
 COPY . .
 
 EXPOSE 8000
 
-ENTRYPOINT [ "python" ]
-CMD [ "app.py" ]
+CMD [ "gunicorn","asgi:app","--preload","--workers","4","--bind","0.0.0.0:8000","--worker-class","uvicorn.workers.UvicornWorker"]

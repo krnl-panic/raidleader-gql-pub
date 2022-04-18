@@ -1,4 +1,5 @@
-import json
+import os
+
 from ariadne import graphql as GraphQL
 from ariadne.asgi import PLAYGROUND_HTML
 from fastapi import Request, Response
@@ -9,6 +10,11 @@ from .context import get_graphql_context
 from .database import engine, Session
 from .graphql import schema
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DEBUG = os.getenv("RLGQL_DEBUG", False)
 
 def create_app():
     """Create the FastAPI application."""
@@ -36,7 +42,7 @@ def create_app():
                     schema,
                     data,
                     context_value=get_graphql_context(request, session),
-                    debug=True,
+                    debug=DEBUG,
                 )
                 if success:
                     return response

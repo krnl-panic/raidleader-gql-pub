@@ -34,6 +34,5 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: raidleader-gql
         run: |
-          docker build -t "$ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA" .
-          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA"
-          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:latest"
+          docker build -t "$ECR_REGISTRY/$ECR_REPOSITORY:production" .
+          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:production"

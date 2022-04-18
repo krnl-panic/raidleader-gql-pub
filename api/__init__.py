@@ -3,6 +3,7 @@ from ariadne import graphql as GraphQL
 from ariadne.asgi import PLAYGROUND_HTML
 from fastapi import Request, Response
 from fastapi.applications import FastAPI
+from starlette.responses import HTMLResponse
 
 from .context import get_graphql_context
 from .database import engine, Session
@@ -23,8 +24,8 @@ def create_app():
         return response
 
     @app.get("/graphql")
-    def graphql_playground(_request: Request, _response: Response):
-        return PLAYGROUND_HTML
+    async def graphql_playground(_request: Request, _response: Response):
+        return HTMLResponse(content=PLAYGROUND_HTML, status_code=200)
 
     @app.post("/graphql")
     async def graphql_server(request: Request, _response: Response):

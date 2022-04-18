@@ -12,6 +12,9 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
+    - name: Create .env
+      run: echo 'DB_DSN="${{ secrets.DB_DSN }}"' >> .env
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:

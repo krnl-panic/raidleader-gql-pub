@@ -1,12 +1,14 @@
-from api.database import db
+from sqlalchemy import Column, String, BigInteger
+
+from api.database import BaseModel
 
 
-class User(db.Model):
+class User(BaseModel):
     """ """
 
     __tablename__ = "user"
-    discord_id = db.Column(db.BigInteger, nullable=False)
-    discord_username = db.Column(db.String, nullable=False)
+    discord_id = Column(BigInteger, nullable=False)
+    discord_username = Column(String, nullable=False)
 
     def to_json(self):
         """ """

@@ -1,6 +1,8 @@
 import enum
 
-from api.database import db
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum
+
+from api.database import BaseModel
 
 
 class PlayerClassEnum(enum.Enum):
@@ -18,13 +20,13 @@ class PlayerClassEnum(enum.Enum):
     deathknight = "deathknight"
 
 
-class Character(db.Model):
+class Character(BaseModel):
     """ """
 
     __tablename__ = "character"
-    name = db.Column(db.String(128), nullable=False)
-    player_class = db.Column(db.Enum(PlayerClassEnum), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    name = Column(String(128), nullable=False)
+    player_class = Column(Enum(PlayerClassEnum), nullable=False)
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
 
     def to_json(self):
         """ """
@@ -32,7 +34,7 @@ class Character(db.Model):
             "id": self.id,
             "name": self.name,
             "user_id": self.user_id,
-            "playerClass": self.player_class,
+            "playerClass": self.player_class.value,
             "createdAt": self.created_at,
             "updatedAt": self.updated_at,
             "deletedAt": self.deleted_at,

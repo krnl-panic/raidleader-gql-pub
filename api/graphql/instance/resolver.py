@@ -1,6 +1,7 @@
 from ariadne import ObjectType
-from api.graphql.util import get_loader
 from sqlalchemy.exc import DBAPIError
+
+from api.graphql.util import get_loader
 
 instance = ObjectType("Instance")
 

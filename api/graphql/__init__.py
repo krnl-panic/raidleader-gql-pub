@@ -3,8 +3,6 @@ import os
 from ariadne import make_executable_schema, load_schema_from_path
 
 from api.graphql.mutation import mutation
-from .query import query
-from .mutation import mutation
 from .auction import auction_bindings
 from .auction_session import auction_session_bindings
 from .boss import boss_bindings
@@ -12,6 +10,8 @@ from .character import character_bindings
 from .instance import instance_bindings
 from .item import item_bindings
 from .loot import loot_bindings
+from .mutation import mutation
+from .query import query
 from .raid import raid_bindings
 from .user import user_bindings
 

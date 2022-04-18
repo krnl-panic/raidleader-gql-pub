@@ -7,22 +7,22 @@ type Mutation {
     # Raid
     createRaid(
         name: String!
+        instanceId: ID!
         startTime: String!
         endTime: String!
-        createdAt: String
-    ): Raid!
-    updateRaid(id: ID!, name: String, startTime: String, endTime: String): Raid!
-    deleteRaid(id: ID!): Raid!
+    ): Raid
+    updateRaid(id: ID!, name: String, startTime: String, endTime: String, instanceId: ID): Raid
+    deleteRaid(id: ID!): Raid
 
     # Instance
-    createInstance(name: String!): Instance!
-    updateInstance(id: ID!, name: String!): Instance!
-    deleteInstance(id: ID!): Instance!
+    createInstance(name: String!): Instance
+    updateInstance(id: ID!, name: String!): Instance
+    deleteInstance(id: ID!): Instance
 
     # Boss
-    createBoss(name: String!, instanceId: ID!): Boss!
-    updateBoss(id: ID!, name: String, instanceId: ID): Boss!
-    deleteBoss(id: ID!): Boss!
+    createBoss(name: String!, instanceId: ID!): Boss
+    updateBoss(id: ID!, name: String, instanceId: ID): Boss
+    deleteBoss(id: ID!): Boss
 
     # Item
     createItem(
@@ -30,43 +30,42 @@ type Mutation {
         bossId: ID
         instanceId: ID
         wowheadUrl: String!
-    ): Item!
-    updateItem(id: ID!, bossId: ID, instanceId: ID, wowheadUrl: String): Item!
-    deleteItem(id: ID!): Item!
+        wowId: Int!
+    ): Item
+    updateItem(id: ID!, bossId: ID, instanceId: ID, wowheadUrl: String): Item
+    deleteItem(id: ID!): Item
 
     # Loot
-    createLoot(raidId: ID!, itemId: ID!): Loot!
-    updateLoot(id: ID!, raidId: ID, itemId: ID, auctionId: ID): Loot!
-    deleteLoot(id: ID!): Loot!
+    createLoot(raidId: ID!, itemId: ID!, auctionId: ID): Loot
+    updateLoot(id: ID!, raidId: ID, itemId: ID, auctionId: ID): Loot
+    deleteLoot(id: ID!): Loot
 
     # User
-    createUser(discordId: ID!, discordUsername: String!): User!
-    updateUser(id: ID!, discordId: ID, discordUsername: String): User!
-    deleteUser(id: ID!): User!
+    createUser(discordId: ID!, discordUsername: String!): User
+    updateUser(id: ID!, discordId: ID, discordUsername: String): User
+    deleteUser(id: ID!): User
 
     # Character
     createCharacter(
         name: String!
         playerClass: PlayerClass!
         userId: ID!
-    ): Character!
-    updateCharacter(id: ID!, playerClass: PlayerClass, userId: ID): Character!
-    deleteCharacter(id: ID!): Character!
+    ): Character
+    updateCharacter(id: ID!, name: String, playerClass: PlayerClass, userId: ID): Character
+    deleteCharacter(id: ID!): Character
 
     # AuctionSession
-    createAuctionSession(raidId: ID!): AuctionSession!
+    createAuctionSession(raidId: ID!): AuctionSession
     updateAuctionSession(
         id: ID!
         raidId: ID
-        winnerId: ID
-        price: Int
-    ): AuctionSession!
-    deleteAuctionSession(id: ID!): AuctionSession!
+    ): AuctionSession
+    deleteAuctionSession(id: ID!): AuctionSession
 
     # Auction
-    createAuction(auctionId: ID!, lootId: ID!): Auction!
-    updateAuction(id: ID!, auctionId: ID, lootId: ID): Auction!
-    deleteAuction(id: ID!): Auction!
+    createAuction(sessionId: ID!): Auction
+    updateAuction(id: ID!, sessionId: ID): Auction
+    deleteAuction(id: ID!): Auction
 }
 
 type Query {
@@ -84,7 +83,6 @@ type Query {
 
     # Item
     listBossItems(bossId: ID!): [Item!]
-    listRaidItems(raidId: ID!): [Item!]
     getItem(id: ID!): Item
 
     # Loot
@@ -106,7 +104,6 @@ type Query {
     getAuctionSession(id: ID!): AuctionSession
 
     # Auction
-    listRaidAuctions(raidId: ID!): [Auction!]
     getAuction(id: ID!): Auction
 }
 
@@ -122,32 +119,35 @@ type Raid {
 type Instance {
     id: ID!
     name: String!
-    bosses: [Boss!]!
+    bosses: [Boss!]
 }
 
 type Boss {
     id: ID!
     name: String!
     instance: Instance!
-    items: [Item!]!
+    items: [Item!]
 }
 
 type Item {
     id: ID!
     name: String!
     wowheadUrl: String
+    wowId: Int!
     boss: Boss
 }
 
 type Loot {
     id: ID!
-    #  raid: Raid!
-    #  item: Item!
+    raid: Raid!
+    item: Item!
 }
 
 type User {
     id: ID!
-    characters: [Character!]!
+    discordId: ID!
+    discordUsername: String!
+    characters: [Character!]
 }
 
 type Character {
@@ -158,7 +158,7 @@ type Character {
 
 type AuctionSession {
     id: ID!
-    auctions: [Auction!]!
+    auctions: [Auction!]
 }
 
 type Auction {

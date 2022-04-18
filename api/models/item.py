@@ -1,15 +1,17 @@
-from api.database import db
+from sqlalchemy import Column, Integer, String, ForeignKey
+
+from api.database import BaseModel
 
 
-class Item(db.Model):
+class Item(BaseModel):
     """ """
 
     __tablename__ = "item"
-    name = db.Column(db.String(128), nullable=False)
-    boss_id = db.Column(db.Integer, db.ForeignKey("boss.id"))
-    instance_id = db.Column(db.Integer, db.ForeignKey("instance.id"))
-    wowhead_url = db.Column(db.String)
-    wow_id = db.Column(db.Integer, nullable=False)
+    name = Column(String(128), nullable=False)
+    boss_id = Column(Integer, ForeignKey("boss.id"))
+    instance_id = Column(Integer, ForeignKey("instance.id"))
+    wowhead_url = Column(String)
+    wow_id = Column(Integer, nullable=False)
 
     def to_json(self):
         """ """

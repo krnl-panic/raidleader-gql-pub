@@ -1,7 +1,7 @@
 from ariadne import QueryType
 
 from api.data_loaders.auction import AuctionLoader, SessionAuctionsLoader
-from api.data_loaders.auction_session import AuctionSessionLoader
+from api.data_loaders.auction_session import AuctionSessionLoader, RaidAuctionSessionsLoader
 from api.data_loaders.boss import BossLoader, InstanceBossesLoader
 from api.data_loaders.character import CharacterLoader, UserCharactersLoader
 from api.data_loaders.instance import InstanceLoader
@@ -26,14 +26,14 @@ async def list_instances_resolver(_, _info):
     :param _info:
 
     """
-    results = await InstanceModel.query.where(
-        InstanceModel.deleted_at is None
-    ).gino.all()
+    db_session = _info.context['db_session']
+    results = await InstanceModel.get_all(db_session)
     return [instance.to_json() for instance in results]
 
 
 async def list_raids_resolver(_, _info):
-    results = await RaidModel.query.where(RaidModel.deleted_at is None).gino.all()
+    db_session = _info.context['db_session']
+    results = await RaidModel.get_all(db_session)
     return [raid.to_json() for raid in results]
 
 
@@ -44,7 +44,8 @@ async def list_users_resolver(_, _info):
     :param _info:
 
     """
-    results = await UserModel.query.where(UserModel.deleted_at is None).gino.all()
+    db_session = _info.context['db_session']
+    results = await UserModel.get_all(db_session)
     return [user.to_json() for user in results]
 
 
@@ -89,7 +90,7 @@ query.set_field("getCharacter", loader_resolver("Character", CharacterLoader.res
 # AuctionSession Queries
 query.set_field(
     "listRaidAuctionSessions",
-    loader_resolver("SessionAuctions", SessionAuctionsLoader.resolver),
+    loader_resolver("RaidAuctionSessions", RaidAuctionSessionsLoader.resolver),
 )
 query.set_field(
     "getAuctionSession",

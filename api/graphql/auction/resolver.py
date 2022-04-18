@@ -1,8 +1,21 @@
 from ariadne import ObjectType, convert_kwargs_to_snake_case
-from api.graphql.util import get_loader
 from sqlalchemy.exc import DBAPIError
 
+from api.graphql.util import get_loader
+
 auction = ObjectType("Auction")
+
+
+@convert_kwargs_to_snake_case
+async def resolve_session(model_dict, info):
+    try:
+        loader = get_loader(info, "AuctionSession")
+        result = await loader.context_resolver(model_dict)
+        payload = result
+    except Exception as e:
+        print("Caught Exception: ", repr(e))
+        payload = []
+    return payload
 
 
 @convert_kwargs_to_snake_case
@@ -25,3 +38,4 @@ async def resolve_loots(model_dict, info):
 
 
 auction.set_field("loots", resolve_loots)
+auction.set_field("session", resolve_session)

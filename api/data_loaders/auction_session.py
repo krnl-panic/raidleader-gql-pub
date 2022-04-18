@@ -1,8 +1,8 @@
-from aiodataloader import DataLoader
 from api.models import AuctionSession
+from .base import BaseLoader
 
 
-class AuctionSessionLoader(DataLoader):
+class AuctionSessionLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -11,7 +11,7 @@ class AuctionSessionLoader(DataLoader):
         :param keys:
 
         """
-        return await AuctionSession.batch_loader(keys)
+        return await AuctionSession.batch_loader(keys, db_session=self.db_session)
 
     def resolver(self, _context, _info, *, id):
         """
@@ -24,16 +24,12 @@ class AuctionSessionLoader(DataLoader):
         """
         return self.load(id)
 
-    def context_resolver(self, context):
-        """
-
-        :param context:
-
-        """
-        return self.load(context.session_id)
+    def context_resolver(self, model_dict):
+        """ """
+        return self.load(model_dict['session_id'])
 
 
-class RaidAuctionSessionsLoader(DataLoader):
+class RaidAuctionSessionsLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -42,7 +38,7 @@ class RaidAuctionSessionsLoader(DataLoader):
         :param keys:
 
         """
-        return await AuctionSession.child_batch_loader(keys, parent_id_field="raid_id")
+        return await AuctionSession.child_batch_loader(keys, parent_id_field="raid_id", db_session=self.db_session)
 
     def resolver(self, _context, _info, *, raid_id):
         """
@@ -55,10 +51,10 @@ class RaidAuctionSessionsLoader(DataLoader):
         """
         return self.load(raid_id)
 
-    def context_resolver(self, context):
+    def context_resolver(self, model_dict):
         """
 
-        :param context:
+        :param model_dict:
 
         """
-        return self.load(context.session_id)
+        return self.load(model_dict["raid_id"])

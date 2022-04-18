@@ -1,8 +1,8 @@
-from aiodataloader import DataLoader
 from api.models import Instance
+from .base import BaseLoader
 
 
-class InstanceLoader(DataLoader):
+class InstanceLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -11,7 +11,7 @@ class InstanceLoader(DataLoader):
         :param keys:
 
         """
-        return await Instance.batch_loader(keys)
+        return await Instance.batch_loader(keys, db_session=self.db_session)
 
     def resolver(self, _context, _info, *, id):
         """
@@ -24,10 +24,10 @@ class InstanceLoader(DataLoader):
         """
         return self.load(id)
 
-    def context_resolver(self, context):
+    def context_resolver(self, model_dict):
         """
 
-        :param context:
+        :param model_dict:
 
         """
-        return self.load(context.instance_id)
+        return self.load(model_dict['instance_id'])

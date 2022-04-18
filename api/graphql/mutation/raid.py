@@ -1,83 +1,43 @@
 # mutation.py
-from datetime import datetime
-from zoneinfo import ZoneInfo
 
-from api.database import db
 from ariadne import convert_kwargs_to_snake_case
 
+from api.graphql.util import create_resolver, update_resolver, delete_resolver
 from api.models import Raid
+from dateutil.parser import parse
 
 
 @convert_kwargs_to_snake_case
 async def create_raid_resolver(_, info, name, start_time, end_time, instance_id):
     """
-
-    :param _: param info:
-    :param name: param start_time:
-    :param end_time: param instance_id:
-    :param info:
-    :param start_time:
-    :param instance_id:
-
+    Create a raid
     """
-    try:
-        raid = Raid(
-            name=name, start_time=start_time, end_time=end_time, instance_id=instance_id
-        )
-        db.session.add(raid)
-        db.session.commit()
-        payload = raid.to_json()
-    except ValueError:
-        payload = None
-    return payload
+    start = parse(start_time)
+    end = parse(end_time)
+    return await create_resolver(Raid, info, name=name, start_time=start, end_time=end,
+                                 instance_id=int(instance_id))
 
 
 @convert_kwargs_to_snake_case
-async def update_raid_resolver(_, info, id, name=None, start_time=None, end_time=None):
+async def update_raid_resolver(_, info, id, name=None, start_time=None, end_time=None, instance_id=None):
     """
-
-    :param _: param info:
-    :param id: param name:  (Default value = None)
-    :param start_time: Default value = None)
-    :param end_time: Default value = None)
-    :param info:
-    :param name:  (Default value = None)
-
+    Update a raid
     """
-    try:
-        raid = Raid.query.filter_by(deleted_at=None, id=id).all()
-        if raid:
-            raid.name = name or raid.name
-            raid.start_time = start_time or raid.start_time
-            raid.end_time = end_time or raid.end_time
-            raid.updated_at = datetime.now(tz=ZoneInfo("America/New_York"))
-        db.session.add(raid)
-        db.session.commit()
-
-        payload = raid.to_json()
-    except AttributeError:
-        payload = None
-    return payload
+    kwargs = {}
+    if name:
+        kwargs['name'] = name
+    if start_time:
+        kwargs['start_time'] = parse(start_time)
+    if end_time:
+        kwargs['end_time'] = parse(end_time)
+    if instance_id:
+        kwargs['instance_id'] = int(instance_id)
+    return await update_resolver(Raid, info, model_id=id, **kwargs)
 
 
 @convert_kwargs_to_snake_case
 async def delete_raid_resolver(_, info, id):
     """
-
-    :param _: param info:
-    :param id:
-    :param info:
-
+    Delete a raid
     """
-    try:
-        raid = Raid.query.get(id)
-
-        if raid and raid.deleted_at is None:
-            raid.deleted_at = datetime.now(tz=ZoneInfo("America/New_York"))
-            db.session.add(raid)
-            db.session.commit()
-
-        payload = raid.to_json()
-    except AttributeError:
-        payload = None
-    return payload
+    return await delete_resolver(Raid, info, model_id=int(id))

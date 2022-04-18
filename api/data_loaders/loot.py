@@ -1,8 +1,8 @@
-from aiodataloader import DataLoader
 from api.models import Loot
+from .base import BaseLoader
 
 
-class LootLoader(DataLoader):
+class LootLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -11,7 +11,7 @@ class LootLoader(DataLoader):
         :param keys:
 
         """
-        return await Loot.batch_loader(keys)
+        return await Loot.batch_loader(keys, db_session=self.db_session)
 
     def resolver(self, _context, _info, id):
         """
@@ -32,7 +32,7 @@ class LootLoader(DataLoader):
         return self.load(context.loot_id)
 
 
-class AuctionLootsLoader(DataLoader):
+class AuctionLootsLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -41,7 +41,7 @@ class AuctionLootsLoader(DataLoader):
         :param keys:
 
         """
-        return await Loot.child_batch_loader(keys, parent_id_field="auction_id")
+        return await Loot.child_batch_loader(keys, parent_id_field="auction_id", db_session=self.db_session)
 
     def resolver(self, _context, _info, *, auction_id):
         """
@@ -55,7 +55,7 @@ class AuctionLootsLoader(DataLoader):
         return self.load(auction_id)
 
 
-class RaidLootsLoader(DataLoader):
+class RaidLootsLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -64,7 +64,7 @@ class RaidLootsLoader(DataLoader):
         :param keys:
 
         """
-        return await Loot.child_batch_loader(keys, parent_id_field="raid_id")
+        return await Loot.child_batch_loader(keys, parent_id_field="raid_id", db_session=self.db_session)
 
     def resolver(self, _context, _info, *, raid_id):
         """

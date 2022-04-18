@@ -1,32 +1,18 @@
-from aiodataloader import DataLoader
 from api.models import Raid
+from .base import BaseLoader
 
 
-class RaidLoader(DataLoader):
+class RaidLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
-        """
-
-        :param keys:
-
-        """
-        return await Raid.batch_loader(keys)
+        """ """
+        return await Raid.batch_loader(keys, db_session=self.db_session)
 
     def resolver(self, _context, _info, id):
-        """
-
-        :param _context: param _info:
-        :param id:
-        :param _info:
-
-        """
+        """  """
         return self.load(id)
 
-    def context_resolver(self, context):
-        """
-
-        :param context:
-
-        """
-        return self.load(context.raid_id)
+    def context_resolver(self, model_dict: dict[str:any]):
+        """ """
+        return self.load(model_dict["raid_id"])

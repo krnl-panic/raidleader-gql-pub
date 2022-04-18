@@ -1,11 +1,13 @@
-from api.database import db
+from sqlalchemy import Column, Integer, ForeignKey
+
+from api.database import BaseModel
 
 
-class AuctionSession(db.Model):
+class AuctionSession(BaseModel):
     """ """
 
     __tablename__ = "auction_session"
-    raid_id = db.Column(db.Integer, db.ForeignKey("raid.id"))
+    raid_id = Column(Integer, ForeignKey("raid.id"))
 
     def to_json(self):
         """ """

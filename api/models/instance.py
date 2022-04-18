@@ -1,11 +1,13 @@
-from api.database import db
+from sqlalchemy import Column, String
+
+from api.database import BaseModel
 
 
-class Instance(db.Model):
+class Instance(BaseModel):
     """ """
 
     __tablename__ = "instance"
-    name = db.Column(db.String(128), nullable=False)
+    name = Column(String(128), nullable=False)
 
     def to_json(self):
         """ """

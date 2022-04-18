@@ -1,8 +1,8 @@
-from aiodataloader import DataLoader
 from api.models import Character
+from .base import BaseLoader
 
 
-class CharacterLoader(DataLoader):
+class CharacterLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -11,7 +11,7 @@ class CharacterLoader(DataLoader):
         :param keys:
 
         """
-        return await Character.batch_loader(keys)
+        return await Character.batch_loader(keys, db_session=self.db_session)
 
     def resolver(self, _context, _info, id):
         """
@@ -32,7 +32,7 @@ class CharacterLoader(DataLoader):
         return self.load(context.character_id)
 
 
-class UserCharactersLoader(DataLoader):
+class UserCharactersLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -41,7 +41,7 @@ class UserCharactersLoader(DataLoader):
         :param keys:
 
         """
-        return await Character.child_batch_loader(keys, parent_id_field="user_id")
+        return await Character.child_batch_loader(keys, parent_id_field="user_id", db_session=self.db_session)
 
     def resolver(self, _context, _info, *, user_id):
         """

@@ -1,76 +1,32 @@
 # mutation.py
-from datetime import datetime
-from zoneinfo import ZoneInfo
-
 from ariadne import convert_kwargs_to_snake_case
 
-from api.database import db
+from api.graphql.util import create_resolver, update_resolver, delete_resolver
 from api.models import Auction
 
 
 @convert_kwargs_to_snake_case
-async def create_auction_resolver(_, info, raid_id, loot_id):
+async def create_auction_resolver(_, info, session_id):
     """
-
-    :param _: param info:
-    :param raid_id: param loot_id:
-    :param info:
-    :param loot_id:
-
+    Create a new auction.
     """
-    try:
-        auction = Auction(raid_id=raid_id, loot_id=loot_id)
-        db.session.add(auction)
-        db.session.commit()
-        payload = auction.to_json()
-    except ValueError:
-        payload = None
-    return payload
+    return await create_resolver(Auction, info, session_id=int(session_id))
 
 
 @convert_kwargs_to_snake_case
-async def update_auction_resolver(_, info, id, raid_id, loot_id):
+async def update_auction_resolver(_, info, id, session_id=None):
     """
-
-    :param _: param info:
-    :param id: param raid_id:
-    :param loot_id:
-    :param info:
-    :param raid_id:
-
+    Update an auction.
     """
-    try:
-        auction = Auction.query.filter_by(deleted_at=None, id=id).all()
-        if auction:
-            auction.raid_id = raid_id
-            auction.loot_id = loot_id
-        db.session.add(auction)
-        db.session.commit()
-
-        payload = auction.to_json()
-    except AttributeError:
-        payload = None
-    return payload
+    kwargs = {}
+    if session_id:
+        kwargs['session_id'] = int(session_id)
+    return await update_resolver(Auction, info, model_id=id, **kwargs)
 
 
 @convert_kwargs_to_snake_case
 async def delete_auction_resolver(_, info, id):
     """
-
-    :param _: param info:
-    :param id:
-    :param info:
-
+    Delete an auction.
     """
-    try:
-        auction = Auction.query.get(id)
-
-        if auction and auction.deleted_at is None:
-            auction.deleted_at = datetime.now(tz=ZoneInfo("America/New_York"))
-            db.session.add(auction)
-            db.session.commit()
-
-        payload = auction.to_json()
-    except AttributeError:
-        payload = None
-    return payload
+    return await delete_resolver(Auction, info, model_id=id)

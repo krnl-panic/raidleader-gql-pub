@@ -1,7 +1,7 @@
 from ariadne import ObjectType, convert_kwargs_to_snake_case
+from sqlalchemy.exc import DBAPIError
 
 from api.graphql.util import get_loader
-from sqlalchemy.exc import DBAPIError
 
 auction_session = ObjectType("AuctionSession")
 

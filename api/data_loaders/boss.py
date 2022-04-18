@@ -1,8 +1,8 @@
-from aiodataloader import DataLoader
 from api.models import Boss
+from .base import BaseLoader
 
 
-class BossLoader(DataLoader):
+class BossLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -11,7 +11,7 @@ class BossLoader(DataLoader):
         :param keys:
 
         """
-        return await Boss.batch_loader(keys)
+        return await Boss.batch_loader(keys, db_session=self.db_session)
 
     def resolver(self, _context, _info, *, id):
         """
@@ -33,7 +33,7 @@ class BossLoader(DataLoader):
         return self.load(context.boss_id)
 
 
-class InstanceBossesLoader(DataLoader):
+class InstanceBossesLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -42,7 +42,7 @@ class InstanceBossesLoader(DataLoader):
         :param keys:
 
         """
-        return await Boss.child_batch_loader(keys, parent_id_field="instance_id")
+        return await Boss.child_batch_loader(keys, parent_id_field="instance_id", db_session=self.db_session)
 
     def resolver(self, _context, _info, *, instance_id):
         """

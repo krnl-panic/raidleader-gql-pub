@@ -1,12 +1,14 @@
-from api.database import db
+from sqlalchemy import Column, Integer, String, ForeignKey
+
+from api.database import BaseModel
 
 
-class Boss(db.Model):
+class Boss(BaseModel):
     """ """
 
     __tablename__ = "boss"
-    name = db.Column(db.String(128), nullable=False)
-    instance_id = db.Column(db.Integer, db.ForeignKey("instance.id"), nullable=False)
+    name = Column(String(128), nullable=False)
+    instance_id = Column(Integer, ForeignKey("instance.id"), nullable=False)
 
     def to_json(self):
         """ """

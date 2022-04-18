@@ -1,8 +1,8 @@
-from aiodataloader import DataLoader
 from api.models import Auction
+from .base import BaseLoader
 
 
-class AuctionLoader(DataLoader):
+class AuctionLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -11,7 +11,7 @@ class AuctionLoader(DataLoader):
         :param keys:
 
         """
-        return await Auction.batch_loader(keys)
+        return await Auction.batch_loader(keys, db_session=self.db_session)
 
     def resolver(self, _context, _resolve_info, *, id):
         """
@@ -34,7 +34,7 @@ class AuctionLoader(DataLoader):
         return self.load(context.auction_id)
 
 
-class SessionAuctionsLoader(DataLoader):
+class SessionAuctionsLoader(BaseLoader):
     """ """
 
     async def batch_load_fn(self, keys):
@@ -43,7 +43,7 @@ class SessionAuctionsLoader(DataLoader):
         :param keys:
 
         """
-        return await Auction.child_batch_loader(keys, parent_id_field="session_id")
+        return await Auction.child_batch_loader(keys, parent_id_field="session_id", db_session=self.db_session)
 
     def resolver(self, _context, _resolve_info, *, session_id):
         """

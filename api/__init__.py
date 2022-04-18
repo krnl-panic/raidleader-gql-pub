@@ -4,7 +4,8 @@ from ariadne import graphql as GraphQL
 from ariadne.asgi import PLAYGROUND_HTML
 from fastapi import Request, Response
 from fastapi.applications import FastAPI
-from starlette.responses import HTMLResponse
+from sqlalchemy import JSON
+from starlette.responses import HTMLResponse, JSONResponse
 
 from .context import get_graphql_context
 from .database import engine, Session
@@ -23,6 +24,10 @@ def create_app():
     @app.on_event("shutdown")
     async def shutdown():
         await engine.dispose()
+        
+    @app.get("/healthcheck")
+    async def health_check(_: Request, response: Response):
+        return JSONResponse({"status": "ok"}, status_code=200)
 
     @app.get("/")
     def read_root(_: Request, response: Response):

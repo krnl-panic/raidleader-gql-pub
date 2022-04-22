@@ -26,7 +26,7 @@ class AuctionSessionLoader(BaseLoader):
 
     def context_resolver(self, model_dict):
         """ """
-        return self.load(model_dict['session_id'])
+        return self.load(model_dict["session_id"])
 
 
 class RaidAuctionSessionsLoader(BaseLoader):
@@ -38,7 +38,9 @@ class RaidAuctionSessionsLoader(BaseLoader):
         :param keys:
 
         """
-        return await AuctionSession.child_batch_loader(keys, parent_id_field="raid_id", db_session=self.db_session)
+        return await AuctionSession.child_batch_loader(
+            keys, parent_id_field="raid_id", db_session=self.db_session
+        )
 
     def resolver(self, _context, _info, *, raid_id):
         """

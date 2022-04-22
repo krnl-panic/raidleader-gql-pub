@@ -41,7 +41,9 @@ class AuctionLootsLoader(BaseLoader):
         :param keys:
 
         """
-        return await Loot.child_batch_loader(keys, parent_id_field="auction_id", db_session=self.db_session)
+        return await Loot.child_batch_loader(
+            keys, parent_id_field="auction_id", db_session=self.db_session
+        )
 
     def resolver(self, _context, _info, *, auction_id):
         """
@@ -64,7 +66,9 @@ class RaidLootsLoader(BaseLoader):
         :param keys:
 
         """
-        return await Loot.child_batch_loader(keys, parent_id_field="raid_id", db_session=self.db_session)
+        return await Loot.child_batch_loader(
+            keys, parent_id_field="raid_id", db_session=self.db_session
+        )
 
     def resolver(self, _context, _info, *, raid_id):
         """

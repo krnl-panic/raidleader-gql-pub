@@ -41,7 +41,9 @@ class UserCharactersLoader(BaseLoader):
         :param keys:
 
         """
-        return await Character.child_batch_loader(keys, parent_id_field="user_id", db_session=self.db_session)
+        return await Character.child_batch_loader(
+            keys, parent_id_field="user_id", db_session=self.db_session
+        )
 
     def resolver(self, _context, _info, *, user_id):
         """

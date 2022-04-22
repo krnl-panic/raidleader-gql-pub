@@ -25,7 +25,7 @@ class ItemLoader(BaseLoader):
 
     def context_resolver(self, model_dict: dict[str:any]):
         """ """
-        return self.load(model_dict['item_id'])
+        return self.load(model_dict["item_id"])
 
 
 class BossItemsLoader(BaseLoader):
@@ -37,7 +37,9 @@ class BossItemsLoader(BaseLoader):
         :param keys:
 
         """
-        return await Item.child_batch_loader(keys, parent_id_field="boss_id", db_session=self.db_session)
+        return await Item.child_batch_loader(
+            keys, parent_id_field="boss_id", db_session=self.db_session
+        )
 
     def resolver(self, _context, _info, *, boss_id):
         """

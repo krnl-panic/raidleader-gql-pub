@@ -1,4 +1,5 @@
 import os
+import ssl
 
 from sqlalchemy.engine.url import URL, make_url
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -8,7 +9,6 @@ from starlette.config import Config
 from starlette.datastructures import Secret
 
 _config = Config(".env")
-
 
 DB_DRIVER = _config("DB_DRIVER", default="postgresql+asyncpg")
 DB_HOST = os.getenv("DB_HOST") or _config("DB_HOST", default=None)
@@ -26,6 +26,22 @@ DB_RETRY_LIMIT = _config("DB_RETRY_LIMIT", cast=int, default=1)
 DB_RETRY_INTERVAL = _config("DB_RETRY_INTERVAL", cast=int, default=1)
 
 
-engine = create_async_engine(DB_DSN, future=True, echo=False, connect_args={"ssl": "require"})
-Session = ScopedSession(sessionmaker(engine, expire_on_commit=False, class_=AsyncSession))
+# Load CA bundle for server certificate verification,
+# equivalent to sslrootcert= in DSN.
+sslctx = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=".certs/sa.pem")
+
+sslctx.check_hostname = False
+
+# Load client certificate and private key for client
+# authentication, equivalent to sslcert= and sslkey= in
+# DSN.
+sslctx.load_cert_chain(
+    ".certs/client.pem",
+    keyfile=".certs/key.pem",
+)
+
+engine = create_async_engine(
+    DB_DSN, future=True, echo=False, connect_args={"ssl": sslctx}
+)
+Session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 Base = declarative_base()

@@ -20,9 +20,9 @@ async def update_boss_resolver(_, info, id, name, instance_id):
     """
     kwargs = {}
     if name:
-        kwargs['name'] = name
+        kwargs["name"] = name
     if instance_id:
-        kwargs['instance_id'] = int(instance_id)
+        kwargs["instance_id"] = int(instance_id)
     return await update_resolver(Boss, info, model_id=id, **kwargs)
 
 

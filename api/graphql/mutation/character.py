@@ -10,21 +10,25 @@ async def create_character_resolver(_, info, name, player_class, user_id):
     """
     Create a new character.
     """
-    return await create_resolver(Character, info, name=name, player_class=player_class, user_id=int(user_id))
+    return await create_resolver(
+        Character, info, name=name, player_class=player_class, user_id=int(user_id)
+    )
 
 
 @convert_kwargs_to_snake_case
-async def update_character_resolver(_, info, id, name=None, player_class=None, user_id=None):
+async def update_character_resolver(
+    _, info, id, name=None, player_class=None, user_id=None
+):
     """
     Update a character.
     """
     kwargs = {}
     if name:
-        kwargs['name'] = name
+        kwargs["name"] = name
     if player_class:
-        kwargs['player_class'] = player_class
+        kwargs["player_class"] = player_class
     if user_id:
-        kwargs['user_id'] = int(user_id)
+        kwargs["user_id"] = int(user_id)
     return await update_resolver(Character, info, model_id=id, **kwargs)
 
 

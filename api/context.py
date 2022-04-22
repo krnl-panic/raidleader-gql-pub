@@ -58,7 +58,11 @@ def get_graphql_context(request: Request, session: AsyncSession) -> Dict[str, an
     :param request:
 
     """
-    return {"data_loaders": construct_data_loaders(session), "request": request, "db_session": session}
+    return {
+        "data_loaders": construct_data_loaders(session),
+        "request": request,
+        "db_session": session,
+    }
 
 
 def get_data_loader(context, key):

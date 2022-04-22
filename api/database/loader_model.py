@@ -66,8 +66,11 @@ class BaseModel(LoaderBase, TimestampMixin):
         parent_ids = [int(key) for key in keys]
         field_parent_id = getattr(cls, parent_id_field)
 
-        query = select(cls).where(and_(field_parent_id.in_(parent_ids), cls.deleted_at == None)).order_by(
-            field_parent_id)
+        query = (
+            select(cls)
+            .where(and_(field_parent_id.in_(parent_ids), cls.deleted_at == None))
+            .order_by(field_parent_id)
+        )
         result = await db_session.execute(query)
         rows = result.scalars().all()
 
@@ -92,14 +95,18 @@ class BaseModel(LoaderBase, TimestampMixin):
         await db_session.flush()
 
     async def update(self, db_session, **kwargs):
-        q = update(self.__class__).where(and_(self.__class__.id == self.id, self.__class__.deleted_at == None))
+        q = update(self.__class__).where(
+            and_(self.__class__.id == self.id, self.__class__.deleted_at == None)
+        )
         q = q.values(**kwargs)
         q.execution_options(synchronize_session=True)
         await db_session.execute(q)
         return self
 
     async def delete(self, db_session):
-        q = update(self.__class__).where(and_(self.__class__.id == self.id, self.__class__.deleted_at == None))
+        q = update(self.__class__).where(
+            and_(self.__class__.id == self.id, self.__class__.deleted_at == None)
+        )
         q = q.values(deleted_at=datetime.now(tz=ZoneInfo("America/New_York")))
         q.execution_options(synchronize_session=True)
         await db_session.execute(q)
@@ -107,10 +114,14 @@ class BaseModel(LoaderBase, TimestampMixin):
 
     @classmethod
     async def get(cls, db_session, id):
-        q = await db_session.execute(select(cls).where(and_(cls.id == id, cls.deleted_at == None)))
+        q = await db_session.execute(
+            select(cls).where(and_(cls.id == id, cls.deleted_at == None))
+        )
         return q.scalars().first()
 
     @classmethod
     async def get_all(cls, db_session):
-        q = await db_session.execute(select(cls).where(cls.deleted_at == None).order_by(cls.id))
+        q = await db_session.execute(
+            select(cls).where(cls.deleted_at == None).order_by(cls.id)
+        )
         return q.scalars().all()

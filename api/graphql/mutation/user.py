@@ -10,7 +10,9 @@ async def create_user_resolver(_, info, discord_id, discord_username):
     """
     Create a new user.
     """
-    return await create_resolver(User, info, discord_id=int(discord_id), discord_username=discord_username)
+    return await create_resolver(
+        User, info, discord_id=int(discord_id), discord_username=discord_username
+    )
 
 
 @convert_kwargs_to_snake_case
@@ -20,9 +22,9 @@ async def update_user_resolver(_, info, id, discord_id=None, discord_username=No
     """
     kwargs = {}
     if discord_id is not None:
-        kwargs['discord_id'] = int(discord_id)
+        kwargs["discord_id"] = int(discord_id)
     if discord_username is not None:
-        kwargs['discord_username'] = discord_username
+        kwargs["discord_username"] = discord_username
 
     return await update_resolver(User, info, model_id=id, **kwargs)
 

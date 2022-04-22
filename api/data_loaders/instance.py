@@ -30,4 +30,4 @@ class InstanceLoader(BaseLoader):
         :param model_dict:
 
         """
-        return self.load(model_dict['instance_id'])
+        return self.load(model_dict["instance_id"])

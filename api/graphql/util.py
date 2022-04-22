@@ -40,7 +40,9 @@ def get_loader(resolve_info, object_type):
     return get_data_loader(resolve_info.context, object_type)
 
 
-async def update_resolver(model_type: Type[BaseModel], resolve_info, model_id: int, **kwargs):
+async def update_resolver(
+    model_type: Type[BaseModel], resolve_info, model_id: int, **kwargs
+):
     int_id = int(model_id)
     db_session = resolve_info.context["db_session"]
     payload = None
@@ -56,7 +58,9 @@ async def update_resolver(model_type: Type[BaseModel], resolve_info, model_id: i
     return payload
 
 
-async def delete_resolver(model_type: Type[BaseModel], resolve_info, model_id: Union[int, str]):
+async def delete_resolver(
+    model_type: Type[BaseModel], resolve_info, model_id: Union[int, str]
+):
     int_id = int(model_id)
     db_session = resolve_info.context["db_session"]
     payload = None

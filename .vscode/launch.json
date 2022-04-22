@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Python: FastAPI",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["asgi:app"],
+      "jinja": true,
+      "justMyCode": true
+    },
+    {
       "name": "Python: Debug Current File",
       "type": "python",
       "request": "launch",

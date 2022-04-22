@@ -43,7 +43,9 @@ class SessionAuctionsLoader(BaseLoader):
         :param keys:
 
         """
-        return await Auction.child_batch_loader(keys, parent_id_field="session_id", db_session=self.db_session)
+        return await Auction.child_batch_loader(
+            keys, parent_id_field="session_id", db_session=self.db_session
+        )
 
     def resolver(self, _context, _resolve_info, *, session_id):
         """

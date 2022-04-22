@@ -3,6 +3,7 @@
 
 # Virtualenv
 .venv/
+.venv_ps/
 
 # Mac OS
 .DS_Store

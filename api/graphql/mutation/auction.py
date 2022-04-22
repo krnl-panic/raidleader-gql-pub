@@ -20,7 +20,7 @@ async def update_auction_resolver(_, info, id, session_id=None):
     """
     kwargs = {}
     if session_id:
-        kwargs['session_id'] = int(session_id)
+        kwargs["session_id"] = int(session_id)
     return await update_resolver(Auction, info, model_id=id, **kwargs)
 
 

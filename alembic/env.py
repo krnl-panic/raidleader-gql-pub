@@ -1,9 +1,10 @@
 import os
-from logging.config import fileConfig
+import ssl
 
+from logging.config import fileConfig
 from alembic import context
 from dotenv import load_dotenv
-from sqlalchemy import engine_from_config
+from sqlalchemy import engine_from_config, create_engine
 from sqlalchemy import pool
 
 load_dotenv()  # take environment variables from .env.
@@ -12,7 +13,7 @@ load_dotenv()  # take environment variables from .env.
 # access to the values within the .ini file in use.
 config = context.config
 
-config.set_main_option("sqlalchemy.url", os.environ["DB_SYNC_DSN"] or "Default://")
+DB_SYNC_DSN = os.getenv("DB_SYNC_DSN", "Default://")
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -65,13 +66,21 @@ def run_migrations_online():
 
 
     """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
+    ssl_context = ssl.create_default_context(
+        ssl.Purpose.SERVER_AUTH, cafile=".certs/sa.pem"
+    )
+    ssl_context.load_cert_chain(certfile=".certs/client.pem", keyfile=".certs/key.pem")
+    args = {
+        "sslrootcert": ".certs/sa.pem",
+        "sslcert": ".certs/client.pem",
+        "sslkey": ".certs/key.pem",
+        "sslmode": "verify-ca",
+    }
+    engine = create_engine(
+        DB_SYNC_DSN, poolclass=pool.NullPool, echo=False, connect_args=args
     )
 
-    with connectable.connect() as connection:
+    with engine.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():

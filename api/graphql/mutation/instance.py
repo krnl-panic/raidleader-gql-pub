@@ -20,7 +20,7 @@ async def update_instance_resolver(_, info, id, name):
     """
     kwargs = {}
     if name:
-        kwargs['name'] = name
+        kwargs["name"] = name
     return await update_resolver(Instance, info, model_id=id, **kwargs)
 
 

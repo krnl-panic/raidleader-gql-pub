@@ -1,7 +1,10 @@
 from ariadne import QueryType
 
 from api.data_loaders.auction import AuctionLoader, SessionAuctionsLoader
-from api.data_loaders.auction_session import AuctionSessionLoader, RaidAuctionSessionsLoader
+from api.data_loaders.auction_session import (
+    AuctionSessionLoader,
+    RaidAuctionSessionsLoader,
+)
 from api.data_loaders.boss import BossLoader, InstanceBossesLoader
 from api.data_loaders.character import CharacterLoader, UserCharactersLoader
 from api.data_loaders.instance import InstanceLoader
@@ -26,13 +29,13 @@ async def list_instances_resolver(_, _info):
     :param _info:
 
     """
-    db_session = _info.context['db_session']
+    db_session = _info.context["db_session"]
     results = await InstanceModel.get_all(db_session)
     return [instance.to_json() for instance in results]
 
 
 async def list_raids_resolver(_, _info):
-    db_session = _info.context['db_session']
+    db_session = _info.context["db_session"]
     results = await RaidModel.get_all(db_session)
     return [raid.to_json() for raid in results]
 
@@ -44,7 +47,7 @@ async def list_users_resolver(_, _info):
     :param _info:
 
     """
-    db_session = _info.context['db_session']
+    db_session = _info.context["db_session"]
     results = await UserModel.get_all(db_session)
     return [user.to_json() for user in results]
 

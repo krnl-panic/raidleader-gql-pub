@@ -1,4 +1,5 @@
 import os
+import requests
 
 from ariadne import graphql as GraphQL
 from ariadne.asgi import PLAYGROUND_HTML
@@ -17,6 +18,7 @@ load_dotenv()
 
 DEBUG = os.getenv("RLGQL_DEBUG", False)
 
+
 def create_app():
     """Create the FastAPI application."""
     app = FastAPI(title="GraphQL API server for raidleader.io")
@@ -24,10 +26,11 @@ def create_app():
     @app.on_event("shutdown")
     async def shutdown():
         await engine.dispose()
-        
+
     @app.get("/healthcheck")
     async def health_check(_: Request, response: Response):
-        return JSONResponse({"status": "ok"}, status_code=200)
+        ipresp = requests.get("https://curlmyip.org/")
+        return JSONResponse({"status": "ok", "ip": ipresp.text}, status_code=200)
 
     @app.get("/")
     def read_root(_: Request, response: Response):

@@ -18,18 +18,7 @@ DB_PASSWORD = os.getenv("DB_PASSWORD") or _config("DB_PASSWORD", default=None)
 DB_DATABASE = os.getenv("DB_DATABASE") or _config("DB_DATABASE", default=None)
 DB_CONNECTION = os.getenv("DB_CONNECTION") or None
 
-DB_DSN = os.getenv("DB_DSN") or _config(
-    "DB_DSN",
-    cast=make_url,  # type: ignore
-    default=URL(
-        drivername=DB_DRIVER,
-        username=DB_USER,
-        password=DB_PASSWORD,
-        host=DB_HOST,
-        port=DB_PORT,
-        database=DB_DATABASE,
-    ),  # type: ignore
-)
+DB_DSN = os.getenv("DB_DSN") or None
 
 DB_POOL_MIN_SIZE = _config("DB_POOL_MIN_SIZE", cast=int, default=5)
 DB_POOL_MAX_SIZE = _config("DB_POOL_MAX_SIZE", cast=int, default=20)

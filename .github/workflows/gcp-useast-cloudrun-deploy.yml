@@ -54,7 +54,7 @@ env:
   GAR_LOCATION: us-east4 # TODO: update Artifact Registry location
   SERVICE: rlio-gql-api-useast
   IMAGE: rlio-production-docker/py-fapi-gql # TODO: update Cloud Run service name
-  REGION: 26 # TODO: update Cloud Run service region
+  REGION: us-east4 # TODO: update Cloud Run service region
   PORT: 8000
 
 jobs:

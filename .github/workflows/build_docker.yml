@@ -2,20 +2,18 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
       - name: Create .env
-        run: echo 'DB_DSN="${{ secrets.DB_DSN }}"' >> .env
+        run: echo 'DB_DSN="${{ secrets.CLOUD_SQL_DSN }}"' >> .env
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag "michaelfay/raidleader_gql:$GITHUB_SHA"
       - name: Log in to Docker Hub

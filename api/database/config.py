@@ -17,8 +17,6 @@ DB_USER = os.getenv("DB_USER") or _config("DB_USER", default=None)
 DB_PASSWORD = os.getenv("DB_PASSWORD") or _config("DB_PASSWORD", default=None)
 DB_DATABASE = os.getenv("DB_DATABASE") or _config("DB_DATABASE", default=None)
 
-DB_SSL_AUTH = os.getenv("DB_SSL_AUTH") or False
-
 DB_DSN = os.getenv("DB_DSN") or _config(
     "DB_DSN",
     cast=make_url,  # type: ignore
@@ -41,15 +39,6 @@ DB_USE_CONNECTION_FOR_REQUEST = _config(
 DB_RETRY_LIMIT = _config("DB_RETRY_LIMIT", cast=int, default=1)
 DB_RETRY_INTERVAL = _config("DB_RETRY_INTERVAL", cast=int, default=1)
 
-args = {
-    "host" : DB_HOST,
-    "user": DB_USER,
-    "dbname": DB_DATABASE,
-    "sslcert": ".certs/client.pem",
-    "sslkey": ".certs/key.pem",
-    "sslrootcert": ".certs/sa.pem",
-    "sslmode": "verify-full"
-}
-engine = create_async_engine(DB_DRIVER, future=True, echo=False, connect_args=args) if DB_SSL_AUTH else create_async_engine(DB_DSN, future=True, echo=False)
+engine = create_async_engine(DB_DSN, future=True, echo=False)
 Session = ScopedSession(sessionmaker(engine, expire_on_commit=False, class_=AsyncSession))
 Base = declarative_base()

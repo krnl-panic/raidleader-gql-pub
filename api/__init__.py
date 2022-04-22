@@ -29,7 +29,7 @@ def create_app():
 
     @app.get("/healthcheck")
     async def health_check(_: Request, response: Response):
-        ipresp = requests.get("https://curlmyip.org/")
+        ipresp = requests.get("https://api.ipify.org/?format=text")
         return JSONResponse({"status": "ok", "ip": ipresp.text}, status_code=200)
 
     @app.get("/")

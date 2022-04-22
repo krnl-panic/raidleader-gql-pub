@@ -77,13 +77,6 @@ jobs:
       #           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
       #           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
 
-      # BEGIN - Create secrets .env
-      - name: Write Certs
-        run: |-
-          echo "DB_DATABASE=\"${{ secrets.CLOUD_SQL_DB_NAME }}\"" >> .env
-          echo "DB_PASSWORD=\"${{ secrets.CLOUD_SQL_DB_PASSWORD }}\"" >> .env
-          echo "DB_USER=\"${{ secrets.CLOUD_SQL_DB_USER }}\"" >> .env
-
       # NOTE: Alternative option - authentication via credentials json
       - name: Google Auth
         id: auth
@@ -103,7 +96,7 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build --build-arg DB_CONNECTION="${{ secrets.CLOUD_SQL_INSTANCE_NAME }}" -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }}" ./
+          docker build --build-arg DB_DSN="${{ secrets.CLOUD_SQL_DSN }}" -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }}" ./
           docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }}"
 
       # END - Docker auth and build

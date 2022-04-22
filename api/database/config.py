@@ -16,6 +16,7 @@ DB_PORT = os.getenv("DB_PORT") or _config("DB_PORT", cast=int, default=None)
 DB_USER = os.getenv("DB_USER") or _config("DB_USER", default=None)
 DB_PASSWORD = os.getenv("DB_PASSWORD") or _config("DB_PASSWORD", default=None)
 DB_DATABASE = os.getenv("DB_DATABASE") or _config("DB_DATABASE", default=None)
+DB_CONNECTION = os.getenv("DB_CONNECTION") or None
 
 DB_DSN = os.getenv("DB_DSN") or _config(
     "DB_DSN",
@@ -33,12 +34,17 @@ DB_DSN = os.getenv("DB_DSN") or _config(
 DB_POOL_MIN_SIZE = _config("DB_POOL_MIN_SIZE", cast=int, default=5)
 DB_POOL_MAX_SIZE = _config("DB_POOL_MAX_SIZE", cast=int, default=20)
 DB_ECHO = _config("DB_ECHO", cast=bool, default=False)
-DB_USE_CONNECTION_FOR_REQUEST = _config(
-    "DB_USE_CONNECTION_FOR_REQUEST", cast=bool, default=True
-)
 DB_RETRY_LIMIT = _config("DB_RETRY_LIMIT", cast=int, default=1)
 DB_RETRY_INTERVAL = _config("DB_RETRY_INTERVAL", cast=int, default=1)
 
-engine = create_async_engine(DB_DSN, future=True, echo=False)
+
+db_socket_dir = os.getenv("DB_SOCKET_DIR", "/cloudsql")
+connection_url = URL.create(drivername="postgresql+asyncpg", username=DB_USER, password=DB_PASSWORD, database=DB_DATABASE, query={
+    "unix_sock": "{}/{}/.s.PGSQL.5432".format(
+                db_socket_dir,  # e.g. "/cloudsql"
+                DB_CONNECTION)  # i.e "<PROJECT-NAME>:<INSTANCE-REGION>:<INSTANCE-NAME>"
+})
+
+engine = create_async_engine(connection_url, future=True, echo=False) if DB_CONNECTION else create_async_engine(DB_DSN, future=True, echo=False)
 Session = ScopedSession(sessionmaker(engine, expire_on_commit=False, class_=AsyncSession))
 Base = declarative_base()

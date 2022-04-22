@@ -7,15 +7,16 @@ networks:
 
 services:
   server:
-    image: "michaelfay/raidleader_gql:${GITHUB_SHA}"
+    image: "us-east4-docker.pkg.dev/rlio-production/rlio-production-docker/py-fapi-gql:production"
     container_name: raidleader_gql
-    build: .
+    build:
+      context: .
+      args:
+        DB_SYNC_DSN: "postgresql+psycopg2://${DB_URL}"
+        DB_DSN: "postgresql+asyncpg://${DB_URL}"
     hostname: raidleader_gql
     networks:
       - raidleader
     ports:
-      - "42069:8000"
+      - "8000:8000"
     restart: always
-    environment:
-      ENV: PRODUCTION
-      DB_DSN: "${DB_DSN}"

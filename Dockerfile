@@ -1,14 +1,18 @@
 # Image official Python 3.9
-FROM python:3.9-slim-bullseye as base
+FROM python:3.9-slim-bullseye
+
+ARG DB_DSN=""
+ARG DB_SSL_AUTH=0
+
+ENV DB_DSN $DB_DSN
+ENV DB_SSL_AUTH $DB_SSL_AUTH
 
 # Setup env
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONFAULTHANDLER 1
-ENV PORT 8000
 
-FROM base AS raidleader-gql
 RUN apt-get update && apt-get install -y --no-install-recommends gcc
 
 RUN python -m pip install poetry
@@ -24,6 +28,4 @@ WORKDIR /app
 
 COPY . .
 
-EXPOSE 8000
-
-CMD [ "gunicorn","asgi:app","--preload","--workers","4","--bind","0.0.0.0:8000","--worker-class","uvicorn.workers.UvicornWorker"]
+CMD exec gunicorn asgi:app --preload --workers 1 --threads 8 --bind :$PORT --worker-class --timeout 0 --worker-class "uvicorn.workers.UvicornWorker"

@@ -18,7 +18,8 @@ alembic = "^1.7.7"
 asyncpg = "^0.25.0"
 python-dateutil = "^2.8.2"
 tzdata = "^2022.1"
-SQLAlchemy = { extras = ["asyncio"], version = "^1.4.35" }
+SQLAlchemy = { extras = ["asyncio", "psycopg2"], version = "^1.4.35" }
+psycopg2-binary = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.4"

@@ -2,7 +2,7 @@
 **
 
 # ... except for dependencies and source
-!.env
+!.certs/
 !alembic/
 !api/
 !asgi.py

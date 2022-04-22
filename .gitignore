@@ -60,3 +60,4 @@ docs/_build/
 
 # Environment
 .env
+.local

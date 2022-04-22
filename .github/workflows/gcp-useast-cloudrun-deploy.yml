@@ -84,6 +84,7 @@ jobs:
           echo "${{ secrets.CLOUD_SQL_CLIENT_CERT }}" >> .certs/client.pem
           echo "${{ secrets.CLOUD_SQL_CLIENT_KEY }}" >> .certs/key.pem
           echo "${{ secrets.CLOUD_SQL_SERVER_CA }}" >> .certs/sa.pem
+          chmod 600 .certs/key.pem
 
       # NOTE: Alternative option - authentication via credentials json
       - name: Google Auth

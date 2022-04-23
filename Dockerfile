@@ -23,7 +23,6 @@ RUN python -m poetry install --no-dev
 RUN mkdir /app
 WORKDIR /app
 
-COPY .certs/ .
 COPY . .
 
 CMD exec gunicorn asgi:app --preload --workers 1 --threads 8 --bind :$PORT --timeout 0 --worker-class "uvicorn.workers.UvicornWorker"

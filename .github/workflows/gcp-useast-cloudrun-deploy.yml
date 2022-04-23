@@ -20,7 +20,7 @@ env:
   PROJECT_ID: raidleader-io # TODO: update Google Cloud project id
   GAR_LOCATION: us-east4 # TODO: update Artifact Registry location
   SERVICE: useast-rlio-py-gql
-  IMAGE: raidleader-io/py-gql # TODO: update Cloud Run service name
+  IMAGE: useast-raidleader-io-docker/py-gql # TODO: update Cloud Run service name
   REGION: us-east4 # TODO: update Cloud Run service region
   PORT: 8000
 

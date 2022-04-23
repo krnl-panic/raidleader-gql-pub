@@ -33,15 +33,10 @@ def create_app():
         return JSONResponse({"status": "ok", "ip": ipresp.text}, status_code=200)
 
     @app.get("/")
-    def read_root(_: Request, response: Response):
-        response.status_code = 401
-        return response
-
-    @app.get("/graphql")
     async def graphql_playground(_request: Request, _response: Response):
         return HTMLResponse(content=PLAYGROUND_HTML, status_code=200)
 
-    @app.post("/graphql")
+    @app.post("/")
     async def graphql_server(request: Request, _response: Response):
         async with Session() as session:
             async with session.begin():

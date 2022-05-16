@@ -16,7 +16,7 @@ jobs:
         run: echo 'DB_DSN="${{ secrets.DEV_DB_DSN }}"' >> .env
       - name: Build the Docker image
         run: |-
-          docker build --build-arg DB_DSN="${{ secrets.DEV_DB_DSN }}" --file dev.Dockerfile "michaelfay/raidleader_gql:$GITHUB_SHA" ./
+          docker build --build-arg DB_DSN="${{ secrets.DEV_DB_DSN }}" --file dev.Dockerfile -t "michaelfay/raidleader_gql:$GITHUB_SHA" ./
           docker image tag "michaelfay/raidleader_gql:$GITHUB_SHA" "michaelfay/raidleader_gql:latest"
       - name: Log in to Docker Hub
         run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin

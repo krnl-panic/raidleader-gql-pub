@@ -42,7 +42,7 @@ try:
     )
     connect_args = {"ssl": sslctx}
 except:
-    connect_args = None
+    connect_args = {}
 
 engine = create_async_engine(
     DB_DSN, future=True, echo=False, connect_args=connect_args

@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -13,17 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Create .env
-        run: echo 'DB_DSN="${{ secrets.CLOUD_SQL_DSN }}"' >> .env
-      # BEGIN - Create cert files
-      - name: Write Certs
-        run: |-
-          mkdir -p ./.certs
-          echo "${{ secrets.CLOUD_SQL_CLIENT_CERT }}" >> .certs/client.pem
-          echo "${{ secrets.CLOUD_SQL_CLIENT_KEY }}" >> .certs/key.pem
-          echo "${{ secrets.CLOUD_SQL_SERVER_CA }}" >> .certs/sa.pem
+        run: echo 'DB_DSN="${{ secrets.DEV_DB_DSN }}"' >> .env
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag "michaelfay/raidleader_gql:$GITHUB_SHA"
+        run: |-
+          docker build .  --build-arg DB_DSN="${{ secrets.DEV_DB_DSN }}" --file dev.Dockerfile "michaelfay/raidleader_gql:$GITHUB_SHA" ./
+          docker image tag "michaelfay/raidleader_gql:$GITHUB_SHA" "michaelfay/raidleader_gql:latest"
       - name: Log in to Docker Hub
         run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - name: Publish image to Docker Hub
-        run: docker push "michaelfay/raidleader_gql:$GITHUB_SHA"
+        run: |-
+          docker push "michaelfay/raidleader_gql:$GITHUB_SHA"
+          docker push "michaelfay/raidleader_gql:latest"

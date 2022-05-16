@@ -28,20 +28,24 @@ DB_RETRY_INTERVAL = _config("DB_RETRY_INTERVAL", cast=int, default=1)
 
 # Load CA bundle for server certificate verification,
 # equivalent to sslrootcert= in DSN.
-sslctx = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=".certs/sa.pem")
+try:
+    sslctx = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=".certs/sa.pem")
 
-sslctx.check_hostname = False
+    sslctx.check_hostname = False
 
-# Load client certificate and private key for client
-# authentication, equivalent to sslcert= and sslkey= in
-# DSN.
-sslctx.load_cert_chain(
-    ".certs/client.pem",
-    keyfile=".certs/key.pem",
-)
+    # Load client certificate and private key for client
+    # authentication, equivalent to sslcert= and sslkey= in
+    # DSN.
+    sslctx.load_cert_chain(
+        ".certs/client.pem",
+        keyfile=".certs/key.pem",
+    )
+    connect_args = {"ssl": sslctx}
+except:
+    connect_args = None
 
 engine = create_async_engine(
-    DB_DSN, future=True, echo=False, connect_args={"ssl": sslctx}
+    DB_DSN, future=True, echo=False, connect_args=connect_args
 )
 Session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 Base = declarative_base()

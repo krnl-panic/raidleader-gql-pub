@@ -14,6 +14,7 @@ load_dotenv()  # take environment variables from .env.
 config = context.config
 
 DB_SYNC_DSN = os.getenv("DB_SYNC_DSN", "Default://")
+DB_USE_SSL = os.getenv("DB_USE_SSL", 0)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -75,7 +76,8 @@ def run_migrations_online():
         "sslcert": ".certs/client.pem",
         "sslkey": ".certs/key.pem",
         "sslmode": "verify-ca",
-    }
+    } if DB_USE_SSL == 1 else {}
+    
     engine = create_engine(
         DB_SYNC_DSN, poolclass=pool.NullPool, echo=False, connect_args=args
     )

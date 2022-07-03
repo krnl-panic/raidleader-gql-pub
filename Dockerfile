@@ -25,4 +25,5 @@ WORKDIR /app
 
 COPY . .
 
-CMD exec gunicorn asgi:app --preload --workers 1 --threads 8 --bind :$PORT --timeout 0 --worker-class "uvicorn.workers.UvicornWorker"
+EXPOSE 5050
+CMD exec gunicorn asgi:app --preload --workers 1 --threads 8 --bind :5050 --timeout 0 --worker-class "uvicorn.workers.UvicornWorker"
